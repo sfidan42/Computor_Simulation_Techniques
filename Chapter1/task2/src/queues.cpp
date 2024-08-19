@@ -11,6 +11,20 @@ queues::queues(void)
 	}
 }
 
+std::pair<uint, uint>	&queues::operator[](uint index)
+{
+	if (index > 2)
+		throw std::out_of_range("Index out of range");
+	return (_clocks[index]);
+}
+
+uint	queues::getSize(uint index)
+{
+	if (index > 2)
+		throw std::out_of_range("Index out of range");
+	return (_sizes[index]);
+}
+
 void	queues::display(void)
 {
 	for (uint i = 0; i < 3; i++)

@@ -2,8 +2,16 @@
 
 int	main(void)
 {
-	simulator	sim;
+	try
+	{
+		simulator	sim;
 
-	sim.run();
+		sim.run();
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+		return (1);
+	}
 	return (0);
 }
