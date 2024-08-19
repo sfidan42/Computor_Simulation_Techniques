@@ -1,7 +1,9 @@
+MK		=	make -s -C
+TASKS	=	task1 task2
+
 all:
-	c++ -Wall -Wextra -Werror machine_interference.cpp -o machine_interference
+	@for task in $(TASKS); do echo "running simulation..."; $(MK) $$task; done
 
 clean:
-	rm -f machine_interference
-
-.PHONY: all clean
+	$(MK) task1 clean
+	$(MK) task2 fclean
