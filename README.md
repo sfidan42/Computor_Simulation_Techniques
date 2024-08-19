@@ -2,4 +2,4 @@
 
 ## Chapter 1
 ### Task 1
-![machine_interference](./Chapter1/machine_interference.png)
+![machine_interference](./sources/machine_interference.png)
