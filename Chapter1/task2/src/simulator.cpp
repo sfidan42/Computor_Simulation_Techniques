@@ -11,10 +11,6 @@ uint	simulator::locateEvent(void)
 {
 	uint	min_clock = MAX;
 
-	//for (uint i = 0; i < 3; i++)
-	//	std::cout << "____" << _q.getSize(i);
-	//std::cout << std::endl;
-	//_t.display();
 	_event = None;
 	for (uint i = 0; i < 3; i++)
 	{
@@ -29,14 +25,16 @@ uint	simulator::locateEvent(void)
 			min_clock = _q[i].first;
 		}
 	}
-	_t.next();
+	if (_t.arr_next() < min_clock)
+	{
+		_event = ArrivalNextQueue;
+		min_clock = _t.arr_next();
+	}
 	if (_q.getSize(_t.node_id() - 1) == 0)
 	{
-		min_clock = _t.arr_next();
 		_event = ArrivalNextQueue;
+		min_clock = _t.arr_next();
 	}
-	else
-		_t.arr_next_unset();
 	return (min_clock);
 }
 
@@ -45,21 +43,12 @@ bool	simulator::schedule(void)
 	_master_clock = locateEvent();
 	if (_master_clock == NaN)
 		throw (std::runtime_error("Error: MC is NaN, simulation abort!"));
-	switch (_event)
-	{
-		case Arrival:
-			if (_event_node_id == NaN)
-				throw std::runtime_error("Error: Invalid event node id");
-			break;
-		case ServiceCompletion:
-			break;
-		case ArrivalNextQueue:
-			break;
-		case TimeoutofToken:
-			break;
-		default:
-			break;
-	}
+	if (_master_clock == _t.arr_next())
+		_t.next();
+	if (_event == ArrivalNextQueue && _q.getSize(_t.node_id() - 1) == 0)
+		_t.arr_next_set(_master_clock);
+	else
+		_t.arr_next_unset();
 	return (true);
 }
 
