@@ -25,12 +25,7 @@ uint	simulator::locateEvent(void)
 			min_clock = _q[i].first;
 		}
 	}
-	if (_t.arr_next() < min_clock)
-	{
-		_event = ArrivalNextQueue;
-		min_clock = _t.arr_next();
-	}
-	if (_q.getSize(_t.node_id() - 1) == 0)
+	if (_t.arr_next() < min_clock || _q.getSize(_t.node_id() - 1) == 0)
 	{
 		_event = ArrivalNextQueue;
 		min_clock = _t.arr_next();
@@ -46,9 +41,13 @@ bool	simulator::schedule(void)
 	if (_master_clock == _t.arr_next())
 		_t.next();
 	if (_event == ArrivalNextQueue && _q.getSize(_t.node_id() - 1) == 0)
+	{
 		_t.arr_next_set(_master_clock);
+	}
 	else
+	{
 		_t.arr_next_unset();
+	}
 	return (true);
 }
 
