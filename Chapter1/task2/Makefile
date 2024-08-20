@@ -8,7 +8,7 @@ EXE		=	task2
 CPP		=	c++ -I. -Wall -Wextra -Werror -std=c++17 -g
 
 all: $(EXE)
-	./$(EXE)
+	./$(EXE) || echo "task2 failed"
 
 int/%.o: src/%.cpp
 	$(CPP) -c $< -o $@

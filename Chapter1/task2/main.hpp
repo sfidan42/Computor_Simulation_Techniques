@@ -19,9 +19,11 @@ public:
 	token(void);
 	uint	node_id(void);
 	uint	tout_clock(void);
+	void	tout_clock_unset(void);
 	uint	arr_next(void);
+	void	arr_next_unset(void);
 	void	display(void);
-	void	next(uint &master_clock);
+	void	next(void);
 };
 
 class queues
@@ -33,6 +35,8 @@ public:
 	queues();
 	std::pair<uint, uint>	&operator[](uint index);
 	uint	getSize(uint index);
+	void	incSize(uint index);
+	void	decSize(uint index);
 	void	display(void);
 };
 
@@ -40,13 +44,12 @@ class simulator
 {
 private:
 	event_type	_event;
-	uint		_event_time;
 	uint		_event_node_id;
 private:
 	queues	_q;
 	token	_t;
 	uint	_master_clock;
-	void	locateEvent(void);
+	uint	locateEvent(void);
 	bool	schedule(void);
 public:
 	simulator(void);

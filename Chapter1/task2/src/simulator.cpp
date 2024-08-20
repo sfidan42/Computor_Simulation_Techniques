@@ -7,52 +7,44 @@ simulator::simulator(void)
 	_t = token();
 }
 
-void	simulator::locateEvent(void)
+uint	simulator::locateEvent(void)
 {
-	uint	i;
 	uint	min_clock = MAX;
 
-	_event_node_id = NaN;
+	//for (uint i = 0; i < 3; i++)
+	//	std::cout << "____" << _q.getSize(i);
+	//std::cout << std::endl;
+	//_t.display();
 	_event = None;
-	i = _t.node_id() - 1;
-	if (_q.getSize(i) == 0)
-	{
-		_event = ArrivalNextQueue;
-		_event_time = _t.arr_next();
-		return ;
-	}
 	for (uint i = 0; i < 3; i++)
 	{
+		if (_q[i].first == _master_clock)
+		{
+			_q[i].first += 5 * i + 10;	
+			_q.incSize(i);
+		}
 		if (_q[i].first < min_clock)
 		{
-			min_clock = _q[i].first;
 			_event = Arrival;
-			_event_node_id = i;
-		}
-		if (_q[i].second < min_clock)
-		{
-			min_clock = _q[i].second;
-			_event = ServiceCompletion;
-			_event_node_id = i;
+			min_clock = _q[i].first;
 		}
 	}
-	if (_t.tout_clock() < min_clock)
-	{
-		min_clock = _t.tout_clock();
-		_event = TimeoutofToken;
-	}
-	if (_t.arr_next() < min_clock)
+	_t.next();
+	if (_q.getSize(_t.node_id() - 1) == 0)
 	{
 		min_clock = _t.arr_next();
 		_event = ArrivalNextQueue;
 	}
-	_event_time = min_clock;
+	else
+		_t.arr_next_unset();
+	return (min_clock);
 }
 
 bool	simulator::schedule(void)
 {
-	locateEvent();
-	_master_clock = _event_time;
+	_master_clock = locateEvent();
+	if (_master_clock == NaN)
+		throw (std::runtime_error("Error: MC is NaN, simulation abort!"));
 	switch (_event)
 	{
 		case Arrival:
@@ -62,30 +54,34 @@ bool	simulator::schedule(void)
 		case ServiceCompletion:
 			break;
 		case ArrivalNextQueue:
-			std::cout << "ArrivalNextQueue" << std::endl;
-			_t.next(_master_clock);
 			break;
 		case TimeoutofToken:
 			break;
 		default:
-			return (false);
+			break;
 	}
 	return (true);
 }
 
 void	simulator::run(void)
 {
-	int	n = 20;
-
 	std::cout << "\t-------Queue1-------" << "\t-------Queue2-------" << "\t-------Queue3-------" << "\t--------Token-------" << std::endl;
 	std::cout << "MC\tArr\tDep\tSize\tArr\tDep\tSize\tArr\tDep\tSize\tNode\tTout\tNext" << std::endl;
-	std::cout << _master_clock << "\t";
+	if (_master_clock == NaN)
+		std::cout << "-\t";
+	else
+		std::cout << _master_clock << "\t";
 	_q.display();
 	_t.display();
-	while(this->schedule() && n--)
+	while(this->schedule())
 	{
+		if (_master_clock == NaN)
+			std::cout << "-\t";
+		else
 		std::cout << _master_clock << "\t";
 		_q.display();
 		_t.display();
+		if (_master_clock >= 30)
+			break ;
 	}
 }
