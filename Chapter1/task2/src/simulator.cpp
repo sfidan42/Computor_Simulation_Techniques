@@ -20,7 +20,7 @@ uint	simulator::locateEvent(void)
 			min_clock = _q[i].first;
 		}
 	}
-	if (_t.arr_next() < min_clock || _q.getSize(_t.node_id() - 1) == 0)
+	if (_q.getSize(_t.node_id() - 1) == 0)
 	{
 		_event = ArrivalNextQueue;
 		min_clock = _t.arr_next();
@@ -66,11 +66,22 @@ bool	simulator::schedule(void)
 	{
 		_q.decSize(_t.node_id() - 1);
 		if (_q.getSize(_t.node_id() - 1) == 0)
+		{
+			_t.tout_clock_unset();
 			_q[_t.node_id() - 1].second = NaN;
+			_t.arr_next_set(_master_clock);
+		}
+		else if (_t.tout_clock() == NaN && _t.arr_next() == NaN)
+		{
+			_t.arr_next_set(_master_clock);
+		}
 		else
 			_q[_t.node_id() - 1].second =_master_clock + 6;
-		_t.tout_clock_unset();
-		_t.arr_next_set(_master_clock);
+		if (_q[_t.node_id() - 1].second > _t.tout_clock())
+		{
+			_t.tout_clock_unset();
+			std::cout << "___TIMEOUT!___" << std::endl;
+		}
 	}
 	return (true);
 }
@@ -93,7 +104,7 @@ void	simulator::run(void)
 		std::cout << _master_clock << "\t";
 		_q.display();
 		_t.display();
-		if (_master_clock >= 40)
+		if (_master_clock >= 50)
 			break ;
 	}
 }
