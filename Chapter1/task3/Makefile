@@ -4,7 +4,6 @@ SRC		=	$(addprefix src/, $(S))
 OBJ		=	$(addprefix int/, $(O))
 NAME	=	libtask3.a
 EXE		=	task3
-
 CPP		=	c++ -I. -Wall -Wextra -Werror -std=c++17 -g
 
 all: $(EXE)

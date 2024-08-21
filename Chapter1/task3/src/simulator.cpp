@@ -1,26 +1,26 @@
 #include <main.hpp>
 
-simulator::simulator(void)
+simulator::simulator(void) : _stages{stage(0, NaN, 80, NaN), stage(0, NaN, 80, NaN)}
 {
 	_master_clock = 0;
 	_arr_time = 10;
-	_stages[0] = new stage(0, NaN, 80, NaN);
-	_stages[1] = new stage(0, NaN, 80, NaN);
-}
-
-simulator::~simulator(void)
-{
-	delete _stages[0];
-	delete _stages[1];
 }
 
 void	simulator::update_master_clock(void)
 {
 	unsigned int	min_clk = MAX;
 
+	_event = none;
 	if (_arr_time < min_clk)
 	{
 		min_clk = _arr_time;
+	}
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		if (_stages[i].get_dep_time() < min_clk)
+		{
+			min_clk = _stages[i].get_dep_time();
+		}
 	}
 	_master_clock = min_clk;
 }
@@ -30,8 +30,21 @@ bool	simulator::schedule(void)
 	update_master_clock();
 	if (_arr_time == _master_clock)
 	{
-		_stages[0]->inc_n_cust();
+		_stages[0]++;
 		_arr_time += 40;
+		_stages[0].set_dep_time(_master_clock);
+	}
+	if (_stages[0].get_dep_time() == _master_clock)
+	{
+		_stages[0].unset_dep_time();
+		_stages[0]--;
+		_stages[1]++;
+		_stages[1].set_dep_time(_master_clock + 10);
+	}
+	if (_stages[1].get_dep_time() == _master_clock)
+	{
+		_stages[1].unset_dep_time();
+		_stages[1]--;
 	}
 	return (true);
 }
@@ -60,7 +73,7 @@ void	simulator::run(void)
 	while (schedule() && max_rows--)
 	{
 		display();
-		if (_master_clock >= 20)
+		if (_master_clock >= 400)
 			break ;
 	}
 }
