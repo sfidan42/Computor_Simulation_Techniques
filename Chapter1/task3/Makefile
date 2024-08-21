@@ -2,13 +2,13 @@ S		=	simulator.cpp stage.cpp
 O		=	$(S:.cpp=.o)
 SRC		=	$(addprefix src/, $(S))
 OBJ		=	$(addprefix int/, $(O))
-NAME	=	libtask2.a
-EXE		=	task2
+NAME	=	libtask3.a
+EXE		=	task3
 
 CPP		=	c++ -I. -Wall -Wextra -Werror -std=c++17 -g
 
 all: $(EXE)
-	./$(EXE) || echo "task2 failed"
+	./$(EXE) || echo "$(EXE) failed"
 
 int/%.o: src/%.cpp
 	$(CPP) -c $< -o $@
@@ -20,7 +20,7 @@ $(NAME): int $(OBJ)
 	ar rcs $(NAME) $(OBJ)
 
 $(EXE): main.cpp $(NAME)
-	$(CPP) main.cpp -o $@ -L. -ltask2
+	$(CPP) main.cpp -o $@ -L. -l$(NAME:lib%.a=%)
 
 clean:
 	rm -rf int
