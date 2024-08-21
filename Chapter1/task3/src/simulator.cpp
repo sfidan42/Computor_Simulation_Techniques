@@ -25,15 +25,18 @@ void	simulator::update_master_clock(void)
 	_master_clock = min_clk;
 }
 
-bool	simulator::schedule(void)
+void	simulator::setup_arrival(void)
 {
-	update_master_clock();
 	if (_arr_time == _master_clock)
 	{
 		_stages[0]++;
 		_arr_time += 40;
 		_stages[0].set_dep_time(_master_clock);
 	}
+}
+
+void	simulator::setup_departures(void)
+{
 	if (_stages[0].get_dep_time() == _master_clock)
 	{
 		_stages[0].unset_dep_time();
@@ -46,6 +49,10 @@ bool	simulator::schedule(void)
 		_stages[1].unset_dep_time();
 		_stages[1]--;
 	}
+}
+
+void	simulator::setup_status(void)
+{
 	_stages[0].set_status(idle);
 	_stages[1].set_status(idle);
 	for (unsigned int i = 0; i < 2; i++)
@@ -70,6 +77,26 @@ bool	simulator::schedule(void)
 	}
 	if (_stages[1].get_n_cust() >= 4)
 		_stages[0].set_status(blocked);
+}
+
+bool	simulator::schedule(void)
+{
+	update_master_clock();
+	setup_arrival();
+	setup_departures();
+	setup_status();
+	if (_stages[0].get_n_cust() == NaN || _stages[1].get_n_cust() == NaN)
+	{
+		std::cerr << "Error: NaN value detected" << std::endl;
+		return (false);
+	}
+	if (_master_clock == NaN)
+	{
+		std::cerr << "Master clock is NaN" << std::endl;
+		return (false);
+	}
+	if(_master_clock >= 400)
+		return (false);
 	return (true);
 }
 
@@ -95,9 +122,5 @@ void	simulator::run(void)
 		<< "MC\tAT\t#Cust\tDT1\tBR1\tOP1\tStat1\t#Cust\tDT2\tBR2\tOP2\tStat2\n";
 	display();
 	while (schedule() && max_rows--)
-	{
 		display();
-		if (_master_clock >= 400)
-			break ;
-	}
 }

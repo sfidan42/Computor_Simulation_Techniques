@@ -51,6 +51,9 @@ private:
 	stage			_stages[2];
 private:
 	void	update_master_clock(void);
+	void	setup_arrival(void);
+	void	setup_departures(void);
+	void	setup_status(void);
 	bool	schedule(void);
 	void	display(void);
 public:
