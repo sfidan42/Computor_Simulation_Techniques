@@ -6,7 +6,7 @@ stage::stage(unsigned int n, unsigned int dep, unsigned int brk, unsigned int op
 	_dep_time = dep;
 	_brk_down = brk;
 	_operational = opr;
-	_status = (char *)"idle";
+	_status = idle;
 }
 
 std::ostream	&operator<<(std::ostream &os, const stage &s)
@@ -27,6 +27,12 @@ std::ostream	&operator<<(std::ostream &os, const stage &s)
 		os << "-\t";
 	else
 		os << s.get_operational() << "\t";
-	os << s.get_status();
+	switch (s.get_status())
+	{
+		case idle: os << "idle"; break ;
+		case busy: os << "busy"; break ;
+		case down: os << "down"; break ;
+		case blocked: os << "blocked"; break ;
+	}
 	return (os);
 }

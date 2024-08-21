@@ -5,6 +5,7 @@
 # define MAX (unsigned int)-1
 
 enum e_event_type { none, arrival, departure };
+enum e_status_type { idle, busy, down, blocked };
 
 class stage
 {
@@ -13,7 +14,7 @@ private:
 	unsigned int	_dep_time;
 	unsigned int	_brk_down;
 	unsigned int	_operational;
-	char			*_status;
+	e_status_type	_status;
 	stage();
 public:
 	stage(unsigned int n, unsigned int dep, unsigned int brk, unsigned int opr);
@@ -23,7 +24,7 @@ public:
 	void			operator--(int) { _n_cust--; }
 public:
 	unsigned int	get_dep_time(void) const { return (_dep_time); }
-	void			set_dep_time(unsigned int master_clock) { _dep_time = master_clock + 20; }
+	void			set_dep_time(unsigned int master_clock) { if (isAvaliable()) _dep_time = master_clock + 20; }
 	void			unset_dep_time(void) { _dep_time = NaN; }
 public:
 	unsigned int	get_brk_down(void) const { return (_brk_down); }
@@ -34,8 +35,9 @@ public:
 	void			set_operational(unsigned int master_clock) { _operational = master_clock + 50; }
 	void			unset_operational(void) { _operational = NaN; }
 public:
-	char			*get_status(void) const { return (_status); }
-	void			set_status(char *status){ _status = status; }
+	e_status_type	get_status(void) const { return (_status); }
+	void			set_status(e_status_type status) { _status = status; }
+	bool			isAvaliable(void) { return (_status == idle || _status == busy); }
 };
 
 std::ostream	&operator<<(std::ostream &os, const stage &s);

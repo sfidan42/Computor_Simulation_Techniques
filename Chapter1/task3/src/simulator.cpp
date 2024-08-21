@@ -1,6 +1,6 @@
 #include <main.hpp>
 
-simulator::simulator(void) : _stages{stage(0, NaN, 80, NaN), stage(0, NaN, 80, NaN)}
+simulator::simulator(void) : _stages{stage(0, NaN, 80, NaN), stage(0, NaN, 90, NaN)}
 {
 	_master_clock = 0;
 	_arr_time = 10;
@@ -12,15 +12,15 @@ void	simulator::update_master_clock(void)
 
 	_event = none;
 	if (_arr_time < min_clk)
-	{
 		min_clk = _arr_time;
-	}
 	for (unsigned int i = 0; i < 2; i++)
 	{
 		if (_stages[i].get_dep_time() < min_clk)
-		{
 			min_clk = _stages[i].get_dep_time();
-		}
+		if (_stages[i].get_brk_down() < min_clk)
+			min_clk = _stages[i].get_brk_down();
+		if (_stages[i].get_operational() < min_clk)
+			min_clk = _stages[i].get_operational();
 	}
 	_master_clock = min_clk;
 }
@@ -46,6 +46,30 @@ bool	simulator::schedule(void)
 		_stages[1].unset_dep_time();
 		_stages[1]--;
 	}
+	_stages[0].set_status(idle);
+	_stages[1].set_status(idle);
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		if (_stages[i].get_n_cust() != 0 && _stages[i].isAvaliable())
+			_stages[i].set_status(busy);
+		if (_stages[i].get_brk_down() == _master_clock)
+		{
+			_stages[i].set_status(down);
+			_stages[i].unset_brk_down();
+			_stages[i].unset_dep_time();
+			_stages[i].set_operational(_master_clock + i * 100);
+		}
+		if (_stages[i].get_operational() == _master_clock)
+		{
+			_stages[i].unset_operational();
+			_stages[i].set_brk_down(_master_clock);
+			_stages[i].set_dep_time(_master_clock);
+		}
+		if (_stages[i].get_brk_down() == NaN)
+			_stages[i].set_status(down);
+	}
+	if (_stages[1].get_n_cust() >= 4)
+		_stages[0].set_status(blocked);
 	return (true);
 }
 
