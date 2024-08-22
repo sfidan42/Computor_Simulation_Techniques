@@ -63,7 +63,7 @@ void	simulator::setup_status(void)
 		{
 			_stages[i].set_status(down);
 			_stages[i].unset_brk_down();
-			_stages[i].unset_dep_time();
+			_stages[i].add_dep_time(150);
 			_stages[i].set_operational(_master_clock + i * 100);
 		}
 		if (_stages[i].get_operational() == _master_clock)

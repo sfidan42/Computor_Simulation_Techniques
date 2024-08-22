@@ -26,6 +26,7 @@ public:
 	unsigned int	get_dep_time(void) const { return (_dep_time); }
 	void			set_dep_time(unsigned int master_clock) { if (isAvaliable()) _dep_time = master_clock + 20; }
 	void			unset_dep_time(void) { _dep_time = NaN; }
+	void			add_dep_time(unsigned int time) { if (_dep_time != NaN) _dep_time += time; }
 public:
 	unsigned int	get_brk_down(void) const { return (_brk_down); }
 	void			set_brk_down(unsigned int master_clock) { _brk_down = master_clock + 200; }
