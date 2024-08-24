@@ -2,16 +2,10 @@
 
 void	FrequencyTester::run(void)
 {
-	std::bitset<32>	binary;
 	std::string		binaryString;
 
-	ATester::_generator.printNumbers();
-
 	for (int num : ATester::_generator.getNumbers())
-	{
-		binary = num;
-		binaryString += binary.to_string();
-	}
+		binaryString += std::bitset<32>(num).to_string();
 	std::cout << "Binary string: " << binaryString << std::endl;
 	int	Sn = 0;
 	for (char c : binaryString)

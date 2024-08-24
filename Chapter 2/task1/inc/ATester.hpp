@@ -10,7 +10,7 @@ class ATester
 private:
 	ATester();
 protected:
-	RNG	_generator;
+	const RNG	&_generator;
 public:
 	ATester(const RNG &generator) : _generator(generator) {}
 	virtual void	run(void) = 0;

@@ -12,7 +12,7 @@ void	RNG::generate(std::size_t m)
 		_numbers[i] = rand();
 }
 
-void	RNG::printNumbers(void)
+void	RNG::printNumbers(void) const
 {
 	std::cout<< "\033[33mGenerated Numbers:" << std::endl;
 	for (int num : _numbers)
@@ -20,7 +20,7 @@ void	RNG::printNumbers(void)
 	std::cout << std::endl << "\033[0m";
 }
 
-std::vector<int>	RNG::getNumbers(void)
+std::vector<int>	RNG::getNumbers(void) const
 {
 	return (_numbers);
 }

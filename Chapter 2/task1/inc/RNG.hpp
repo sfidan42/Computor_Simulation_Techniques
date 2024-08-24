@@ -11,6 +11,6 @@ private:
 public:
 	RNG(int seed);
 	void				generate(std::size_t m);
-	void				printNumbers(void);
-	std::vector<int>	getNumbers(void);
+	void				printNumbers(void) const ;
+	std::vector<int>	getNumbers(void) const;
 };
