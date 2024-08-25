@@ -14,4 +14,5 @@ protected:
 public:
 	ATester(const RNG &generator) : _generator(generator) {}
 	virtual void	run(void) = 0;
+	virtual ~ATester() {};
 };

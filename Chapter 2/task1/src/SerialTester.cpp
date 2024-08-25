@@ -15,73 +15,96 @@ int	countSubstrings(const std::string& str, const std::string& pattern)
 	return (count);
 }
 
+void	SerialTester::displayStep(int step)
+{
+	switch (step)
+	{
+	case 0:
+		std::cout << "Binary string: " << _binaryString << std::endl;
+		std::cout << "Binary string size: " << _binaryString.size() << std::endl;
+		for (int i = 0; i < 3; i++)
+			std::cout << "_str[" << i << "].size() = " << _str[i].size() << std::endl;
+		break;
+	case 1:
+		std::cout << "f: ";
+		for (int i = 0; i < 8; i++)
+			std::cout << _freq0[i] << " ";
+		std::cout << std::endl;
+		std::cout << "f': ";
+		for (int i = 0; i < 4; i++)
+			std::cout << _freq1[i] << " ";
+		std::cout << std::endl;
+		std::cout << "f'': ";
+		for (int i = 0; i < 2; i++)
+			std::cout << _freq2[i] << " ";
+		std::cout << std::endl;
+		break;
+	case 2:
+		std::cout << "Sk2_" << _k << " = " << _Sk2[2] << std::endl;
+		std::cout << "Sk2_" << _k - 1 << " = " << _Sk2[1] << std::endl;
+		std::cout << "Sk2_" << _k - 2 << " = " << _Sk2[0] << std::endl;
+		break;
+	case 3:
+		std::cout << "deltaSk2 = |Sk_3 - Sk_2| = " << _deltaSk2 << std::endl;
+		std::cout << "delta2Sk2 = |Sk_3 - 2 * Sk_2 + Sk_1| = " << _delta2Sk2 << std::endl;
+		break;
+	case 4:
+		std::cout << "P_value[0] = IncompleteGamma(pow(2, k - 2), deltaSk2 / 2) = " << _P_value[0] << std::endl;
+		std::cout << "P_value[1] = IncompleteGamma(pow(2, k - 3), delta2Sk2 / 2) = " << _P_value[1] << std::endl;
+		break;
+	}
+}
+
 void	SerialTester::run()
 {
-	int					k = 2;
-	std::string			binaryString;
-	std::string			str[3];
-	int					freq0[8];
-	int					freq1[4];
-	int					freq2[2];
-	double				Sk2[3];
+
 	double				sum;
-	double				deltaSk2;
-	double				delta2Sk2;
-	double				P_value[2];
 
+	_binaryString.clear();
 	for (int num : ATester::_generator.getNumbers())
-		binaryString += std::bitset<32>(num).to_string();
-	std::cout << "Binary string: " << binaryString << std::endl;
-
+		_binaryString += std::bitset<32>(num).to_string();
 	for (int i = 0; i < 3; i++)
-		str[i] = binaryString + binaryString.substr(0, k - i);
-
+		_str[i] = _binaryString + _binaryString.substr(0, _k - i - 1);
+	displayStep(0);
 	for (int i = 0; i < 8; i++)
-		freq0[i] = countSubstrings(str[0], std::bitset<3>(i).to_string());
+		_freq0[i] = countSubstrings(_str[0], std::bitset<3>(i).to_string());
 	for (int i = 0; i < 4; i++)
-		freq1[i] = countSubstrings(str[1], std::bitset<2>(i).to_string());
+		_freq1[i] = countSubstrings(_str[1], std::bitset<2>(i).to_string());
 	for (int i = 0; i < 2; i++)
-		freq2[i] = countSubstrings(str[2], std::bitset<1>(i).to_string());
-	std::cout << "f: ";
-	for (int i = 0; i < 8; i++)
-		std::cout << freq0[i] << " ";
-	std::cout << std::endl;
-	std::cout << "f': ";
-	for (int i = 0; i < 4; i++)
-		std::cout << freq1[i] << " ";
-	std::cout << std::endl;
-	std::cout << "f'': ";
-	for (int i = 0; i < 2; i++)
-		std::cout << freq2[i] << " ";
-	std::cout << std::endl;
-
+		_freq2[i] = countSubstrings(_str[2], std::bitset<1>(i).to_string());
+	displayStep(1);
 	sum = 0;
 	for (int i = 0; i < 8; i++)
-		sum += pow(freq0[i], 2) - binaryString.size();
-	Sk2[0] = (pow(2, k) / binaryString.size()) * sum;
-	std::cout << "Sk2 = " << Sk2[0] << std::endl;
-
+		sum += pow(_freq0[i], 2);
+	_Sk2[2] = (pow(2, _k) / _binaryString.size()) * (sum - _binaryString.size());
 	sum = 0;
 	for (int i = 0; i < 4; i++)
-		sum += pow(freq1[i], 2) - binaryString.size();
-	Sk2[1] = (pow(2, k - 1) / binaryString.size()) * sum;
-	std::cout << "Sk2' = " << Sk2[1] << std::endl;
-
+		sum += pow(_freq1[i], 2);
+	_Sk2[1] = (pow(2, _k - 1) / _binaryString.size()) * (sum - _binaryString.size());
 	sum = 0;
 	for (int i = 0; i < 2; i++)
-		sum += pow(freq2[i], 2) - binaryString.size();
-	Sk2[2] = (pow(2, k - 2) / binaryString.size()) * sum;
-	std::cout << "Sk2'' = " << Sk2[2] << std::endl;
-
-	deltaSk2 = Sk2[0] - Sk2[1];
-	delta2Sk2 = Sk2[0] - 2 * Sk2[1] + Sk2[2];
-	std::cout << "deltaSk2 = " << deltaSk2 << std::endl;
-	std::cout << "delta2Sk2 = " << delta2Sk2 << std::endl;
-
-	P_value[0] = alglib::incompletegamma(pow(2, k - 2), deltaSk2 / 2);
-	P_value[1] = alglib::incompletegamma(pow(2, k - 3), delta2Sk2 / 2);
-
-	std::cout << "P_value_1 = " << P_value[0] << std::endl;
-	std::cout << "P_value_2 = " << P_value[1] << std::endl;
-	
+		sum += pow(_freq2[i], 2);
+	_Sk2[0] = (pow(2, _k - 2) / _binaryString.size()) * (sum - _binaryString.size());
+	displayStep(2);
+	_deltaSk2 = _Sk2[2] - _Sk2[1];
+	_delta2Sk2 = _Sk2[2] - 2 * _Sk2[1] + _Sk2[0];
+	if (_deltaSk2 < 0)
+		_deltaSk2 = -_deltaSk2;
+	if (_delta2Sk2 < 0)
+		_delta2Sk2 = -_delta2Sk2;
+	displayStep(3);
+	int	fault = 0;
+	_P_value[0] = gammds(pow(2, _k - 2), _deltaSk2 / 2, &fault);
+	_P_value[1] = gammds(pow(2, _k - 3), _delta2Sk2 / 2, &fault);
+	if (fault)
+	{
+		std::cerr << "Error: fault in InCompGamma: " << fault << std::endl;
+		return ;
+	}
+	displayStep(4);
+	std::cout << "Checking if any of P-values is less than 0.01:" << std::endl;
+	if (_P_value[0] < 0.01 || _P_value[1] < 0.01)
+		std::cout << "The sequence is not random.\nFAILED" << std::endl;
+	else
+		std::cout << "The sequence is random.\nPASSED" << std::endl;
 }

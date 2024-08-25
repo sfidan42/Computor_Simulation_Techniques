@@ -1,17 +1,22 @@
 S		=	AutocorrelationTester.cpp FrequencyTester.cpp \
 			RunsTester.cpp ChiSqrTest4GoodnFit.cpp \
-			RNG.cpp SerialTester.cpp
+			RNG.cpp SerialTester.cpp asa147.cpp
 O		=	$(S:.cpp=.o)
 SRC		=	$(addprefix src/, $(S))
 OBJ		=	$(addprefix int/, $(O))
 NAME	=	libtask.a
-ALGIB	=	alglib-cpp/libalgib.a
 EXE		=	run
-CPP		=	c++ -I. -Iinc -Ialglib-cpp/src -Wall -Wextra -Werror -std=c++17 -g
-LD		=	-L . -l$(NAME:lib%.a=%) -L alglib-cpp -lalgib
+CPP		=	c++ -I. -Iinc -Wall -Wextra -Werror -std=c++17 -g
+LD		=	-L . -l$(NAME:lib%.a=%)
 
-all: $(ALGIB) $(EXE)
-	@./$(EXE) || echo "$(EXE) failed"
+all: $(EXE)
+	@mkdir -p out
+	@echo "Running tests... (check the files inside ./out)"
+	@./$(EXE) 1 12345 100 > out/frequency_test.txt || echo "$(EXE) 1 failed"
+	@./$(EXE) 2 12345 100 > out/serial_test.txt || echo "$(EXE) 2 failed"
+	@./$(EXE) 3 12345 100 > out/autocorrelation_test.txt || echo "$(EXE) 3 failed"
+	@./$(EXE) 4 12345 4200 > out/runs_test.txt || echo "$(EXE) 4 failed"
+	@./$(EXE) 5 12345 4200 > out/chi_sqr_test_for_good_n_fit.txt || echo "$(EXE) 5 failed"
 
 int/%.o: src/%.cpp
 	$(CPP) -c $< -o $@
@@ -19,21 +24,17 @@ int/%.o: src/%.cpp
 int:
 	mkdir -p int
 
-$(ALGIB):
-	./alglib-src/setup.sh
-	make -C alglib-cpp
-
 $(NAME): int $(OBJ)
 	ar rcs $(NAME) $(OBJ)
 
-$(EXE): main.cpp $(NAME) $(ALGIB)
+$(EXE): main.cpp $(NAME)
 	$(CPP) main.cpp $(LD) -o $@
 
 clean:
-	rm -rf int
+	rm -rf int out
 
 fclean: clean
-	rm -rf $(EXE) $(NAME) alglib-cpp
+	rm -rf $(EXE) $(NAME)
 
 re: fclean all
 

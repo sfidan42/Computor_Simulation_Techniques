@@ -1,26 +1,54 @@
 #include <main.hpp>
 
-int	main(void)
+int	main(int ac, char **av)
 {
-	int						seed = 1234567;
-	RNG						generator(seed);
-	FrequencyTester			t1(generator);
-	SerialTester			t2(generator);
-	AutocorrelationTester	t3(generator);
-	RunsTester				t4(generator);
-	ChiSqrTest4GoodnFit		t5(generator);
+	int	idx;
+	int	seed;
+	int	nums;
+	if (ac != 4)
+	{
+		std::cerr << "Usage: [Program Name] [1-5] [seed value] [#nums to gen]" << std::endl;
+		return (1);
+	}
+	idx = std::atoi(av[1]);
+	seed = std::atoi(av[2]);
+	nums = std::atoi(av[3]);
+	std::cout << "Test number: " << idx << std::endl;
+	std::cout << "Seed value: " << seed << std::endl;
+	std::cout << "#nums to gen.: " << nums << std::endl;
 
-	generator.generate(100);
+	RNG		generator(seed);
+	ATester	*tester;
+
+	generator.generate(nums);
 	generator.printNumbers();
-	std::cout << "___________________Frequency Test__________________" << std::endl;
-	t1.run();
-	std::cout << "____________________Serial Test____________________" << std::endl;
-	t2.run();
-	std::cout << "_________________Autocorrelation Test______________" << std::endl;
-	t3.run();
-	std::cout << "____________________Runs Test______________________" << std::endl;
-	t4.run();
-	std::cout << "________Chi-Square Test for Goodness of Fit________" << std::endl;
-	t5.run();
+	switch (idx)
+	{
+	case 1:
+		tester = new FrequencyTester(generator);
+		std::cout << "___________________Frequency Test__________________" << std::endl;
+		break;
+	case 2:
+		tester = new SerialTester(generator);
+		std::cout << "____________________Serial Test____________________" << std::endl;
+		break;
+	case 3:
+		tester = new AutocorrelationTester(generator);
+		std::cout << "_________________Autocorrelation Test______________" << std::endl;
+		break;
+	case 4:
+		tester = new RunsTester(generator);
+		std::cout << "____________________Runs Test______________________" << std::endl;
+		break;
+	case 5:
+		tester = new ChiSqrTest4GoodnFit(generator);
+		std::cout << "________Chi-Square Test for Goodness of Fit________" << std::endl;
+		break;
+	default:
+		std::cerr << "Usage: [Program Name] [1-5] [seed value] [#nums to gen]" << std::endl;
+		return (1);
+	}
+	tester->run();
+	delete tester;
 	return (0);
 }
