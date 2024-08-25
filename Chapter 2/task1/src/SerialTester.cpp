@@ -58,7 +58,7 @@ void	SerialTester::displayStep(int step)
 void	SerialTester::run()
 {
 
-	double				sum;
+	double	sum;
 
 	_binaryString.clear();
 	for (int num : ATester::_generator.getNumbers())

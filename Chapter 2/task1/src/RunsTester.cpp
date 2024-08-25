@@ -1,6 +1,6 @@
 #include <RunsTester.hpp>
 
-void	operator<<(double r[6], std::vector<int>& vec)
+void	operator<<(double r[6], std::vector<unsigned int>& vec)
 {
 	std::size_t	count;
 
@@ -29,9 +29,9 @@ void	operator<<(double r[6], std::vector<int>& vec)
 
 void	RunsTester::run(void)
 {
-	std::vector<int>	vec;
-	double				r[6];
-	double				R;
+	std::vector<unsigned int>	vec;
+	double						r[6];
+	double						R;
 
 	vec = ATester::_generator.getNumbers();
 	if (vec.size() < 4000)
@@ -49,8 +49,4 @@ void	RunsTester::run(void)
 			R += (r[i] - vec.size() * _b[i]) * (r[j] - vec.size() * _b[j]) * _A[i][j];
 	R /= vec.size();
 	std::cout << "R = " << R << std::endl;
-	if ((std::size_t)R == 6)
-		std::cout << R << " ~~ 6 --> PASSED" << std::endl;
-	else
-		std::cout << R << " !~ 6 --> FAILED" << std::endl;
 }

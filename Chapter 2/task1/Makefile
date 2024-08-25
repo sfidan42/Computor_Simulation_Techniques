@@ -12,11 +12,11 @@ LD		=	-L . -l$(NAME:lib%.a=%)
 all: $(EXE)
 	@mkdir -p out
 	@echo "Running tests... (check the files inside ./out)"
-	@./$(EXE) 1 12345 100 > out/frequency_test.txt || echo "$(EXE) 1 failed"
-	@./$(EXE) 2 12345 100 > out/serial_test.txt || echo "$(EXE) 2 failed"
-	@./$(EXE) 3 12345 100 > out/autocorrelation_test.txt || echo "$(EXE) 3 failed"
-	@./$(EXE) 4 12345 4200 > out/runs_test.txt || echo "$(EXE) 4 failed"
-	@./$(EXE) 5 12345 4200 > out/chi_sqr_test_for_good_n_fit.txt || echo "$(EXE) 5 failed"
+	@./$(EXE) 1 123456 100		> out/frequency_test.txt				|| echo "$(EXE) 1 failed"
+	@./$(EXE) 2 123456 100		> out/serial_test.txt					|| echo "$(EXE) 2 failed"
+	@./$(EXE) 3 123456 100		> out/autocorrelation_test.txt 			|| echo "$(EXE) 3 failed"
+	@./$(EXE) 4 123456 4200		> out/runs_test.txt						|| echo "$(EXE) 4 failed"
+	@./$(EXE) 5 123456 500000	> out/chi_sqr_test_for_good_n_fit.txt	|| echo "$(EXE) 5 failed"
 
 int/%.o: src/%.cpp
 	$(CPP) -c $< -o $@
