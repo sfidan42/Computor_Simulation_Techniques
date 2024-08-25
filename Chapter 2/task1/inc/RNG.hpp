@@ -8,7 +8,6 @@ class RNG
 {
 private:
 	std::vector<unsigned int>	_numbers;
-	unsigned int				_max;
 	RNG(void);
 public:
 	RNG(int seed);

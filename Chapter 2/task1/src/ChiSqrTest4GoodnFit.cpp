@@ -8,8 +8,10 @@ void	ChiSqrTest4GoodnFit::run(void)
 	vec = ATester::_generator.getNumbers();
 	size = vec.size();
 	_normalized.resize(vec.size());
+	unsigned int	max = ATester::_generator.getMax();
+	std::cout << "Max: " << max << std::endl;
 	for (std::size_t i = 0; i < vec.size(); i++)
-		_normalized[i] = static_cast<double>(vec[i]) / ATester::_generator.getMax();
+		_normalized[i] = static_cast<double>(vec[i]) / max;
 	for (std::size_t i = 0; i < size; i++)
 	{
 		if (i > 100)

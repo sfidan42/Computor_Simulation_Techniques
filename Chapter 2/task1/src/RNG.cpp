@@ -1,6 +1,6 @@
 #include <RNG.hpp>
 
-RNG::RNG(int seed) : _max(0)
+RNG::RNG(int seed)
 {
 	srand(seed);
 }
@@ -10,9 +10,6 @@ void	RNG::generate(std::size_t m)
 	_numbers.resize(m);
 	for (std::size_t i = 0; i < m; i++)
 		_numbers[i] = rand();
-	for (unsigned int num : _numbers)
-		if (num > _max)
-			_max = num;
 }
 
 void	RNG::printNumbers(void) const
@@ -45,5 +42,9 @@ std::vector<unsigned int>	RNG::getNumbers(void) const
 
 unsigned int	RNG::getMax(void) const
 {
-	return (_max);
+	unsigned int	max = 0;
+	for (unsigned int num : _numbers)
+		if (num > max)
+			max = num;
+	return (max);
 }
