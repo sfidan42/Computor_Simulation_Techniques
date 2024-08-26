@@ -1,7 +1,8 @@
 S		=	AutocorrelationTester.cpp FrequencyTester.cpp \
 			RunsTester.cpp ChiSqrTest4GoodnFit.cpp \
 			ARNG.cpp SerialTester.cpp asa147.cpp \
-			CongruentialGen.cpp CompositeGen.cpp
+			CongruentialGen.cpp CompositeGen.cpp \
+			TauswortheGen.cpp LaggedFibonacciGen.cpp
 O		=	$(S:.cpp=.o)
 SRC		=	$(addprefix src/, $(S))
 OBJ		=	$(addprefix int/, $(O))
@@ -29,8 +30,8 @@ all: $(EXE)
 	@./$(EXE) 3 123456 100 1		> out/congruential_autocorrelation_test.txt 			|| true
 	@echo "$(GREEN)MK > Running $(CYAN)runs test with 4200 numbers$(END)"
 	@./$(EXE) 4 123456 4200 1		> out/congruential_runs_test.txt						|| true
-	@echo "$(GREEN)MK > Running $(CYAN)chi-squared test for good number of fit with 500000 numbers$(END)"
-	@./$(EXE) 5 123456 50000 1		> out/congruential_chi_sqr_test_for_good_n_fit.txt		|| true
+	@echo "$(GREEN)MK > Running $(CYAN)chi-squared test for good number of fit with 10000 numbers$(END)"
+	@./$(EXE) 5 123456 10000 1		> out/congruential_chi_sqr_test_for_good_n_fit.txt		|| true
 	@echo "$(RED)MK > Composite Generator Testings:$(END)"
 	@echo "$(GREEN)MK > Running $(CYAN)frequency test with 100 numbers$(END)"
 	@./$(EXE) 1 3885576022 100 2	> out/composite_frequency_test.txt						|| true
@@ -40,9 +41,30 @@ all: $(EXE)
 	@./$(EXE) 3 3885576022 100 2	> out/composite_autocorrelation_test.txt				|| true
 	@echo "$(GREEN)MK > Running $(CYAN)runs test with 4200 numbers$(END)"
 	@./$(EXE) 4 3885576022 4200 2	> out/composite_runs_test.txt							|| true
-	@echo "$(GREEN)MK > Running $(CYAN)chi-squared test for good number of fit with 500000 numbers$(END)"
-	@./$(EXE) 5 3885576022 50000 2	> out/Composite_chi_sqr_test_for_good_n_fit.txt			|| true
-
+	@echo "$(GREEN)MK > Running $(CYAN)chi-squared test for good number of fit with 10000 numbers$(END)"
+	@./$(EXE) 5 3885576022 10000 2	> out/composite_chi_sqr_test_for_good_n_fit.txt			|| true
+	@echo "$(RED)MK > Tausworthe Generator Testings:$(END)"
+	@echo "$(GREEN)MK > Running $(CYAN)frequency test with 100 numbers$(END)"
+	@./$(EXE) 1 3885576022 100 3	> out/tausworthe_frequency_test.txt						|| true
+	@echo "$(GREEN)MK > Running $(CYAN)serial test with 100 numbers$(END)"
+	@./$(EXE) 2 1234567890 100 3	> out/tausworthe_serial_test.txt						|| true
+	@echo "$(GREEN)MK > Running $(CYAN)autocorrelation test with 100 numbers$(END)"
+	@./$(EXE) 3 1234567890 100 3	> out/tausworthe_autocorrelation_test.txt				|| true
+	@echo "$(GREEN)MK > Running $(CYAN)runs test with 4200 numbers$(END)"
+	@./$(EXE) 4 1234567890 4200 3	> out/tausworthe_runs_test.txt							|| true
+	@echo "$(GREEN)MK > Running $(CYAN)chi-squared test for good number of fit with 10000 numbers$(END)"
+	@./$(EXE) 5 1234567890 10000 3	> out/tausworthe_chi_sqr_test_for_good_n_fit.txt		|| true
+	@echo "$(RED)MK > Lagged Fibonacci Generator Testings:$(END)"
+	@echo "$(GREEN)MK > Running $(CYAN)frequency test with 100 numbers$(END)"
+	@./$(EXE) 1 1234567890 100 4	> out/lagged_fibonacci_frequency_test.txt				|| true
+	@echo "$(GREEN)MK > Running $(CYAN)serial test with 100 numbers$(END)"
+	@./$(EXE) 2 1234567890 100 4	> out/lagged_fibonacci_serial_test.txt					|| true
+	@echo "$(GREEN)MK > Running $(CYAN)autocorrelation test with 100 numbers$(END)"
+	@./$(EXE) 3 1234567890 100 4	> out/lagged_fibonacci_autocorrelation_test.txt			|| true
+	@echo "$(GREEN)MK > Running $(CYAN)runs test with 4200 numbers$(END)"
+	@./$(EXE) 4 1234567890 4200 4	> out/lagged_fibonacci_runs_test.txt					|| true
+	@echo "$(GREEN)MK > Running $(CYAN)chi-squared test for good number of fit with 10000 numbers$(END)"
+	@./$(EXE) 5 1234567890 10000 4	> out/lagged_fibonacci_chi_sqr_test_for_good_n_fit.txt	|| true	
 	@echo "$(GREEN)MK > Finished.$(RED) Check the files inside the folder ./out$(END)"
 
 int/%.o: src/%.cpp inc/%.hpp

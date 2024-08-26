@@ -1,21 +1,7 @@
 #include <main.hpp>
 
-enum TestType
-{
-	FREQUENCY = 1,
-	SERIAL,
-	AUTOCORRELATION,
-	RUNS,
-	CHI_SQUARE
-};
-
-enum GeneratorType
-{
-	CONGRUENTIAL = 1,
-	COMPOSITE,
-	TAUSWORTHE,
-	LAGGED_FIBONACCI
-};
+enum TestType { FREQUENCY = 1, SERIAL, AUTOCORRELATION, RUNS, CHI_SQUARE };
+enum GeneratorType { CONGRUENTIAL = 1, COMPOSITE, TAUSWORTHE, LAGGED_FIBONACCI };
 
 int	main(int ac, char **av)
 {
@@ -39,14 +25,14 @@ try
 	{
 		case CONGRUENTIAL : generator = new CongruentialGen(int_av[1]); std::cout << "Congruential" << std::endl; break;
 		case COMPOSITE: generator = new CompositeGen(int_av[1]); std::cout << "Composite" << std::endl; break;
-		case TAUSWORTHE: generator = nullptr; std::cout << "Tausworthe" << std::endl; break;
-		case LAGGED_FIBONACCI: generator = nullptr; std::cout << "laggedFibonacci" << std::endl; break;
+		case TAUSWORTHE: generator = new TauswortheGen(int_av[1]); std::cout << "Tausworthe" << std::endl; break;
+		case LAGGED_FIBONACCI: generator = new LaggedFibonacciGen(int_av[1]); std::cout << "laggedFibonacci" << std::endl; break;
 		default: throw std::invalid_argument("Unknown generator number");
 	}
 	if (generator == nullptr)
 		throw std::runtime_error("Failed to create generator");
 	generator->generate(int_av[2]);
-	if (generator->getNumbers().empty())
+	if (generator->getNumbers().empty() || generator->getNumbers().size() != int_av[2])
 		throw std::runtime_error("Failed to generate numbers");
 	generator->printNumbers();	
 	switch (int_av[0])
@@ -68,9 +54,6 @@ try
 		std::cout << "____________________Runs Test______________________" << std::endl;
 		break;
 	case CHI_SQUARE:
-		tester = nullptr;
-		if (int_av[3] == CONGRUENTIAL || int_av[3] == COMPOSITE)
-			throw std::runtime_error("Chi-Square Test for Goodness of Fit is not available for this kind of generator");
 		tester = new ChiSqrTest4GoodnFit(generator);
 		std::cout << "________Chi-Square Test for Goodness of Fit________" << std::endl;
 		break;

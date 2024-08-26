@@ -24,7 +24,7 @@ void	operator<<(double r[6], std::vector<unsigned int>& vec)
 				std::cout << "( ";
 		}
 	}
-	std::cout << std::endl;
+	std::cout << ")" << std::endl;
 }
 
 void	RunsTester::run(void)
