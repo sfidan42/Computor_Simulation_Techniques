@@ -8,4 +8,4 @@
 # include <CompositeGen.hpp>
 # include <TauswortheGen.hpp>
 # include <LaggedFibonacciGen.hpp>
-//# include <MersenneTwisterGen.hpp>
+# include <MersenneTwisterGen.hpp>

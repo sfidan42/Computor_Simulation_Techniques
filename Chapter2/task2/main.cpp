@@ -1,7 +1,7 @@
 #include <main.hpp>
 
 enum TestType { FREQUENCY = 1, SERIAL, AUTOCORRELATION, RUNS, CHI_SQUARE };
-enum GeneratorType { CONGRUENTIAL = 1, COMPOSITE, TAUSWORTHE, LAGGED_FIBONACCI };
+enum GeneratorType { CONGRUENTIAL = 1, COMPOSITE, TAUSWORTHE, LAGGED_FIBONACCI, MERSENNE_TWISTER };
 
 int	main(int ac, char **av)
 {
@@ -27,6 +27,7 @@ try
 		case COMPOSITE: generator = new CompositeGen(int_av[1]); std::cout << "Composite" << std::endl; break;
 		case TAUSWORTHE: generator = new TauswortheGen(int_av[1]); std::cout << "Tausworthe" << std::endl; break;
 		case LAGGED_FIBONACCI: generator = new LaggedFibonacciGen(int_av[1]); std::cout << "laggedFibonacci" << std::endl; break;
+		case MERSENNE_TWISTER: generator = new MersenneTwisterGen(int_av[1]); std::cout << "Mersenne Twister" << std::endl; break;
 		default: throw std::invalid_argument("Unknown generator number");
 	}
 	if (generator == nullptr)
