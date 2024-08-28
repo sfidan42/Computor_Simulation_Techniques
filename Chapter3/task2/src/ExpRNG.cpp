@@ -18,11 +18,12 @@ void ExpRNG::display(unsigned int histSize) const
 
 	for (double num : AStochasticRNG::_nums)
 		histogram[(int)(num * histSize)]++;
-	for (int count : histogram)
+	for (std::size_t _ = 0; _ < histSize; _++)
 	{
-		for (int i = 0; i < count; i++)
+		std::cout << _ + 1 << ": ";
+		for (int i = 0; i < histogram[_]; i++)
 			std::cout << "*";
-		std::cout << std::endl;
+		std::cout << " " << histogram[_] << std::endl;
 	}
 }
 

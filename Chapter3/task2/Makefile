@@ -16,7 +16,7 @@ WHITE	=	\033[0;37m
 END		=	\033[0m
 
 all: $(EXE)
-	./$(EXE)
+	@./$(EXE)
 
 int/%.o: src/%.cpp inc/%.hpp
 	@echo "$(GREEN)MK > Compiling $(BLUE)$<$(END) -> $(YELLOW)$@$(END)"

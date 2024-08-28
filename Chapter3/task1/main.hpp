@@ -31,5 +31,3 @@ public:
 	void	display(unsigned int histSize) const;
 	void	changeLambda(double lambda) { _lambda = lambda; }
 };
-
-double	exp_rng(double lambda);

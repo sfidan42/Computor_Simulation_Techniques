@@ -1,1 +1,3 @@
-#include <simulator.hpp>
+#pragma once
+# include <simulator.hpp>
+# include <ExpRNG.hpp>
