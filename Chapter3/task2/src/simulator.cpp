@@ -1,6 +1,6 @@
 #include <simulator.hpp>
 
-simulator::simulator(void) : _mc(0), _clk{2, 4, 9, -1}, _r((char *)"idle"), _rng(42, .5) {}
+simulator::simulator(void) : _mc(0), _clk{2, 4, 9, -1}, _r((char *)"idle"), _rng(42, .1) {}
 
 static int	smallest_i(double *arr, int n)
 {
@@ -51,7 +51,7 @@ int simulator::schedule_event(void)
 		if (_broken_machines.size() == 0)
 			_r = (char *)"idle";
 		_clk[3] = _mc + _rng.generateOne();
-		_clk[b_i] = _mc + _rng.generateOne();
+		_clk[b_i] = _mc + _rng.generateOne() + 5;
 	}
 	return (1);
 }
