@@ -2,6 +2,7 @@
 # include <iostream>
 # include <queue>
 # include <float.h>
+# include <ExpRNG.hpp>
 
 class simulator
 {
@@ -10,6 +11,7 @@ private:
 	double				_clk[4];
 	char				*_r;
 	std::queue<double>  _broken_machines;
+	ExpRNG				_rng;
 public:
 	simulator(void);
 	~simulator(void) = default;
