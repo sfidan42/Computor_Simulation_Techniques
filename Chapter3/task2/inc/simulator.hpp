@@ -15,7 +15,7 @@ private:
 public:
 	simulator(void);
 	~simulator(void) = default;
-	int	schedule_event(void);
+	int		schedule_event(void);
 	void	print_clks(void);
 public:
 	double		getMasterClock(void) const { return _mc; }

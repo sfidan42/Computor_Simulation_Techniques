@@ -6,9 +6,9 @@ int	main(void)
 		AStochasticRNG	*rng;
 
 		rng = new ExpRNG(42, 3.5);
-		rng->generate(100);
+		rng->generate(1000);
 		std::cout << "Histogram of 100 numbers:" << std::endl;
-		rng->display(10);
+		rng->display(10, 10);
 		delete rng;
 	}
 	{
@@ -25,11 +25,9 @@ int	main(void)
 			std::cout << sim.getMasterClock() << "\t";
 			sim.print_clks();
 			std::cout << sim.brokenMachinesSize() << "\t" << sim.getR() << std::endl;
-			if (sim.getMasterClock() >= 30)
+			if (sim.getMasterClock() >= 50)
 				break ;
 		}
 	}
-
-	
 	return (0);
 }

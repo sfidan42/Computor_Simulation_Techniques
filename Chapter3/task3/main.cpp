@@ -7,16 +7,17 @@ int	main(void)
 		{
 			AStochasticRNG	*rng;
 
-			rng = new ExpRNG(42, 3.5);
-			rng->generate(10000);
-			rng->display(20, 100);
+			rng = new ExpRNG(42, .5);
+			rng->generate(200);
+			rng->display(10);
 			delete rng;
 		}
 		{
-			simulator		sim;
+			simulator	sim;
 
 			sim.run();
 		}
+
 	}
 	catch (const std::exception &e)
 	{
