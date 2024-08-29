@@ -1,5 +1,6 @@
 #pragma once
 # include <vector>
+# define NAN (0.0 / 0.0)
 
 class AStochasticRNG
 {
@@ -12,7 +13,7 @@ protected:
 private:
 	AStochasticRNG(void);
 public:
-	AStochasticRNG(unsigned int seed) : _seed(seed) {};
+	AStochasticRNG(unsigned int seed) : _seed(seed), _max(NAN), _min(NAN), _avg(NAN) {};
 	virtual ~AStochasticRNG(void) = default;
 	virtual void		generate(std::size_t n) = 0;
 	virtual void		display(unsigned int histSize, unsigned int groupSize) const = 0;

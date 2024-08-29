@@ -9,7 +9,7 @@ int	main(void)
 
 			rng = new ExpRNG(42, .5);
 			rng->generate(200);
-			rng->display(10);
+			rng->display(10, 2);
 			delete rng;
 		}
 		{

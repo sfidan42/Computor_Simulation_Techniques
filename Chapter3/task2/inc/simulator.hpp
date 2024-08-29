@@ -1,8 +1,9 @@
 #pragma once
 # include <iostream>
 # include <queue>
-# include <float.h>
 # include <ExpRNG.hpp>
+# include <cfloat>
+# define NAN (0.0 / 0.0)
 
 class simulator
 {

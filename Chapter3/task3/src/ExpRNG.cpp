@@ -2,12 +2,7 @@
 #include <iostream>
 #include <random>
 
-ExpRNG::ExpRNG(unsigned int seed, double lambda) : AStochasticRNG(seed), _lambda(lambda)
-{
-	_max = nan("");
-	_min = nan("");
-	_avg = nan("");
-}
+ExpRNG::ExpRNG(unsigned int seed, double lambda) : AStochasticRNG(seed), _lambda(lambda) {}
 
 double	ExpRNG::generateOne(void)
 {
