@@ -1,5 +1,7 @@
 #pragma once
 # include <queues.hpp>
+# include <ExpRNG.hpp>
+# include <cfloat>
 
 class simulator
 {
@@ -9,10 +11,16 @@ private:
 private:
 	queues	_q;
 	token	_t;
-	uint	_master_clock;
-	uint	locateEvent(void);
+	double	_master_clock;
+private:
+	AStochasticRNG	*_arrivalRNG;
+	AStochasticRNG	*_departureRNG;
+	AStochasticRNG	*_transmissionRNG;
+private:
+	double	locateEvent(void);
 	bool	schedule(void);
 public:
 	simulator(void);
+	~simulator(void);
 	void	run(void);
 };

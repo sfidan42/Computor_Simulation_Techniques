@@ -15,7 +15,10 @@ private:
 public:
 	AStochasticRNG(unsigned int seed) : _seed(seed), _max(NAN), _min(NAN), _avg(NAN) {};
 	virtual ~AStochasticRNG(void) = default;
+	virtual double		generateOne(void) = 0;
+	virtual double		generateOne(unsigned int nom, unsigned int denom) = 0;
 	virtual void		generate(std::size_t n) = 0;
+	virtual void		generate(std::size_t n, unsigned int nom, unsigned int denom) = 0;
 	virtual void		display(unsigned int histSize, unsigned int groupSize) const = 0;
 	std::vector<double>	get(void) const { return (_nums); }
 };

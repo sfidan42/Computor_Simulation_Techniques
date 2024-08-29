@@ -2,16 +2,16 @@
 
 queues::queues(void)
 {
-	uint arr[3] = {2, 4, 6};
+	double arr[3] = {2.345, 4.567, 6.789};
 	for (uint i = 0; i < 3; i++)
 	{
 		_clocks[i].first = arr[i];
-		_clocks[i].second = NaN;
+		_clocks[i].second = -1;
 		_sizes[i] = 0;
 	}
 }
 
-std::pair<uint, uint>	&queues::operator[](uint index)
+std::pair<double, double>	&queues::operator[](uint index)
 {
 	if (index > 2)
 		throw std::out_of_range("Index out of range");
@@ -43,11 +43,11 @@ void	queues::display(void)
 {
 	for (uint i = 0; i < 3; i++)
 	{
-		if (_clocks[i].first == NaN)
+		if (_clocks[i].first < 0)
 			std::cout << "-\t";
 		else
 			std::cout << _clocks[i].first << "\t";
-		if (_clocks[i].second == NaN)
+		if (_clocks[i].second < 0)
 			std::cout << "-\t";
 		else
 			std::cout << _clocks[i].second << "\t";
