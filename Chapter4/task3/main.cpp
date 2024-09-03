@@ -4,7 +4,7 @@ int	main(void)
 {
 	try
 	{
-		Simulator	sim(.01);
+		Simulator	sim(0.5);
 
 		sim.run();
 	}

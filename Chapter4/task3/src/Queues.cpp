@@ -9,6 +9,7 @@ Queues::Queues(void)
 		_clocks[i].second = -1;
 		_sizes[i] = 0;
 	}
+	std::fill(_errCount, _errCount + 3, 0);
 }
 
 std::pair<double, double>	&Queues::operator[](uint index)
@@ -37,6 +38,27 @@ void	Queues::decSize(uint index)
 	if (index > 2)
 		throw std::out_of_range("Index out of range");
 	_sizes[index]--;
+}
+
+uint	Queues::getErrCount(uint index)
+{
+	if (index > 2)
+		throw std::out_of_range("Index out of range");
+	return (_errCount[index]);
+}
+
+void	Queues::incErrCount(uint index)
+{
+	if (index > 2)
+		throw std::out_of_range("Index out of range");
+	_errCount[index]++;
+}
+
+void	Queues::unsetErrCount(uint index)
+{
+	if (index > 2)
+		throw std::out_of_range("Index out of range");
+	_errCount[index] = 0;
 }
 
 void	Queues::display(void)

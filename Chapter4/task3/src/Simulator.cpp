@@ -8,8 +8,9 @@ Simulator::Simulator(double errProb)
 	_master_clock = 0;
 	_q = Queues();
 	_t = Token();
-	_arrivalRNG = new ExpRNG(42, 1.0 / 10.0);
-	_departureRNG = new ExpRNG(42, 1.0 / 5.0);
+	srand(4242);
+	_arrivalRNG = new ExpRNG(42, 1.0 / 8.0);
+	_departureRNG = new ExpRNG(42, 1.0 / 4.0);
 	_transmissionRNG = new ExpRNG(42, 1.0 / 2.5, 1.0 / 20.0);
 }
 
@@ -33,15 +34,26 @@ double	Simulator::locateEvent(void)
 			min_clock = _q[i].first;
 		}
 	}
-	if (_q.getSize(_t.node_id() - 1) == 0 && _t.arr_next() < min_clock && _t.arr_next() >= 0)
+	if (_t.arr_next() < min_clock && _t.arr_next() >= 0)
 	{
 		_event = ArrivalNextQueue;
 		min_clock = _t.arr_next();
 	}
 	if (_q[_t.node_id() - 1].second < min_clock && _q[_t.node_id() - 1].second >= 0)
 	{
-		_event = ServiceCompletion;
 		min_clock = _q[_t.node_id() - 1].second;
+		_event = ServiceCompletion;
+		if (rand() % 100 < _errProb * 100)
+		{
+			std::cout << "___ERROR!___[" << _t.node_id() - 1 << "](" << _q.getErrCount(_t.node_id() - 1) << ")" << std::endl;
+			_q[_t.node_id() - 1].second = -1;
+			_q.incErrCount(_t.node_id() - 1);
+		}
+		if (_q.getErrCount(_t.node_id() - 1) > 3)
+		{
+			_q.unsetErrCount(_t.node_id() - 1);
+			std::cout << "___ERROR RESET!___" << std::endl;
+		}
 	}
 	return (min_clock);
 }
@@ -97,7 +109,6 @@ bool	Simulator::schedule(void)
 			_t.tout_clock_unset();
 			std::cout << "___TIMEOUT!___" << std::endl;
 		}
-
 	}
 	return (true);
 }
@@ -120,7 +131,7 @@ void	Simulator::run(void)
 		std::cout << _master_clock << "\t";
 		_q.display();
 		_t.display();
-		if (_master_clock >= 50)
+		if (_master_clock >= 60)
 			break ;
 	}
 }
