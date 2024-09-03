@@ -30,7 +30,7 @@ double	simulator::locateEvent(void)
 			min_clock = _q[i].first;
 		}
 	}
-	if (_q.getSize(_t.node_id() - 1) == 0 && _t.arr_next() < min_clock && _t.arr_next() >= 0)
+	if (_t.arr_next() < min_clock && _t.arr_next() >= 0)
 	{
 		_event = ArrivalNextQueue;
 		min_clock = _t.arr_next();
