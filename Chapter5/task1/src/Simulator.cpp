@@ -12,6 +12,19 @@ Simulator::Simulator(int nMachines, int nRepairmen)
 		_events[i] = {i, _rng.generateOne(10)};
 }
 
+void    Simulator::_display(void)
+{
+        std::cout << _mc << "\t";
+        for (auto it = _events.begin(), ite = _events.end(); it != ite; it++)
+        {
+                (it->clk < 0)
+                        ? std::cout <<  "-"
+                        : std::cout << it->clk;
+                std::cout << "\t";
+        }
+        _repairmen.display();
+}
+
 int Simulator::schedule_event(void)
 {
 	int		i;
@@ -46,6 +59,7 @@ int Simulator::schedule_event(void)
 DataCollector	Simulator::run(void)
 {
 	DataCollector	dc(_nMachines);
+	std::size_t		c1 = 0, c2 = 0;
 
 	//std::cout << "MC\t";
 	//for (std::size_t i = 0, n = _nMachines; i < n; i++)
@@ -58,19 +72,20 @@ DataCollector	Simulator::run(void)
 	{
 		if (_eventId < _nMachines)
 		{
-			dc[_eventId].push_back(_events[_eventId].clk);
+			dc[_eventId].push_back(_events[_eventId].clk); c1++;
 			_events[_eventId].clk = -1;
-			_repairmen.mostAvaliable().push({_eventId, _mc + _rng.generateOne(10)});
+			_repairmen.mostAvaliable().push({_eventId, _mc + _rng.generateOne(5)});
+			
 		}
 		else
 		{
 			int machineId = _repairmen[_eventId - _nMachines].front().id;
 			_repairmen[_eventId - _nMachines].pop();
-			dc[machineId].back() = _mc - dc[machineId].back();
+			dc[machineId].back() = _mc - dc[machineId].back(); c2++;
 			_events[machineId] = {machineId, _mc + _rng.generateOne(10)};
 		}
 		//_display();
-		if (dc.size() >= 1050)
+		if (dc.size() >= 1050 && c1 == c2)
 			break ;
 	}
 	int i = 0;
