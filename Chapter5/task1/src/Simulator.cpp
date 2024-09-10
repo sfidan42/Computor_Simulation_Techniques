@@ -75,7 +75,6 @@ DataCollector	Simulator::run(void)
 			dc[_eventId].push_back(_events[_eventId].clk); c1++;
 			_events[_eventId].clk = -1;
 			_repairmen.mostAvaliable().push({_eventId, _mc + _rng.generateOne(5)});
-			
 		}
 		else
 		{

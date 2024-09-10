@@ -3,6 +3,7 @@
 # include <stdexcept>
 # include <iostream>
 # include <cmath>
+# include <fstream>
 
 class DataCollector
 {
@@ -23,4 +24,5 @@ public:
 	std::vector<double>	&operator[](int i);
 	std::size_t			size(void) const;
 	void				display(void);
+	void				save(const char *filename) const;
 };

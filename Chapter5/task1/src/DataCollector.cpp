@@ -80,12 +80,26 @@ void	DataCollector::_standardDeviation(void)
 
 	variance = 0;
 	for (int i = 0; i < _nMachines; i++)
-	{
 		for (double d : _data[i])
-		{
 			variance += std::pow(d - _m, 2);
-		}
-	}
 	_stdDev = std::sqrt(variance / this->size());
 	std::cout << "Standard deviation: " << _stdDev << std::endl;
+}
+
+void	DataCollector::save(const char *filename) const
+{
+	std::ofstream	file(filename);
+
+	if (!file.is_open())
+		throw std::runtime_error("DataCollector::save: could not open file!");
+	file << "#data" << std::endl;
+	for (int i = 0; i < _nMachines; i++)
+		for (double d : _data[i])
+			file << d << " ";
+	file << std::endl
+		<< "#mean" << std::endl
+		<< _m << std::endl
+		<< "#stddev" << std::endl
+		<< _stdDev << std::endl;
+	file.close();
 }

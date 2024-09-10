@@ -16,6 +16,7 @@ int	main(void)
 
 			DataCollector dc = sim.run();
 			dc.display();
+			dc.save("data.txt");
 		}
 	}
 	catch (std::exception &e)
