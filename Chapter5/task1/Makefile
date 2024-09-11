@@ -15,8 +15,15 @@ CYAN	=	\033[0;36m
 WHITE	=	\033[0;37m
 END		=	\033[0m
 
-all: $(EXE)
-	@./$(EXE)
+all: out $(EXE)
+	@echo "$(GREEN)MK > Running $(YELLOW)$(EXE)$(END)"
+	@./$(EXE) > out/1_simulation.txt
+	@echo "$(GREEN)MK > Running $(YELLOW)correlogram.py$(END)"
+	@python3 correlogram.py > out/4_results.txt 2> /dev/null
+	@echo "$(GREEN)MK > Results saved in $(YELLOW)out/*$(END)"
+
+out:
+	@mkdir -p out
 
 int/%.o: src/%.cpp inc/%.hpp
 	@echo "$(GREEN)MK > Compiling $(BLUE)$<$(END) -> $(YELLOW)$@$(END)"
@@ -36,12 +43,13 @@ $(EXE): main.cpp $(NAME)
 clean:
 	@echo "$(RED)MK > Removing object files$(END)"
 	@echo "$(RED)MK > Removing output files$(END)"
-	@rm -rf int out
+	@rm -rf int
 
 fclean: clean
 	@echo "$(RED)MK > Removing the executable$(END)"
 	@echo "$(RED)MK > Removing the archive file$(END)"
-	@rm -f $(EXE) $(NAME) data.txt
+	@echo "$(RED)MK > Removing the outputs$(END)"
+	@rm -rf $(EXE) $(NAME) out
 
 re: fclean all
 
