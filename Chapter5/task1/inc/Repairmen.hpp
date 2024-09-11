@@ -3,6 +3,8 @@
 # include <vector>
 # include <stdexcept>
 # include <iostream>
+# include <cfloat>
+# include "Queue.hpp"
 
 typedef struct s_Event
 {
@@ -10,17 +12,15 @@ typedef struct s_Event
 	double	clk;
 }	Event;
 
-typedef std::queue<Event>	Queue;
-
 class Repairmen
 {
 private:
-	std::vector<Queue>	_broken_machines;
+	std::vector<Queue<Event> >	_broken_machines;
 public:
-	void		init(int n);
-	void		display(void);
-	Queue		&operator[](std::size_t idx);
-	double		operator()(std::size_t idx);
-	std::size_t	size(void) const;
-	Queue		&mostAvaliable(void);
+	void			init(int n);
+	void			display(void);
+	Queue<Event>	&operator[](std::size_t idx);
+	double			operator()(std::size_t idx);
+	std::size_t		size(void) const;
+	void			addQueue(Event e);
 };

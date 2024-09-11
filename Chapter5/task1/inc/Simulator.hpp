@@ -2,6 +2,7 @@
 # include <iostream>
 # include <cfloat>
 # include <vector>
+# include <iomanip>
 # include "RNG.hpp"
 # include "Repairmen.hpp"
 # include "DataCollector.hpp"

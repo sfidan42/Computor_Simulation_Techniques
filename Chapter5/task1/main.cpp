@@ -12,11 +12,12 @@ int	main(void)
 		//	delete rng;
 		//}
 		{
-			Simulator	sim(5, 2);
+			Simulator	sim(6, 2);
 
 			DataCollector dc = sim.run();
 			dc.display();
 			dc.save("data.txt");
+			
 		}
 	}
 	catch (std::exception &e)

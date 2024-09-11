@@ -92,14 +92,8 @@ void	DataCollector::save(const char *filename) const
 
 	if (!file.is_open())
 		throw std::runtime_error("DataCollector::save: could not open file!");
-	file << "#data" << std::endl;
 	for (int i = 0; i < _nMachines; i++)
 		for (double d : _data[i])
-			file << d << " ";
-	file << std::endl
-		<< "#mean" << std::endl
-		<< _m << std::endl
-		<< "#stddev" << std::endl
-		<< _stdDev << std::endl;
+			file << d << std::endl;
 	file.close();
 }

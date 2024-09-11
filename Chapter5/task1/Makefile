@@ -41,7 +41,7 @@ clean:
 fclean: clean
 	@echo "$(RED)MK > Removing the executable$(END)"
 	@echo "$(RED)MK > Removing the archive file$(END)"
-	@rm -f $(EXE) $(NAME)
+	@rm -f $(EXE) $(NAME) data.txt
 
 re: fclean all
 

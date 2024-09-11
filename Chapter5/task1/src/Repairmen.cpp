@@ -5,7 +5,7 @@ void	Repairmen::init(int n)
 	_broken_machines.resize(n);
 }
 
-Queue	&Repairmen::operator[](std::size_t idx)
+Queue<Event>	&Repairmen::operator[](std::size_t idx)
 {
 	if (idx >= _broken_machines.size())
 		throw std::out_of_range("idx >= _broken_machines.size()");
@@ -42,26 +42,26 @@ std::size_t	Repairmen::size(void) const
 	return (_broken_machines.size());
 }
 
-Queue	&Repairmen::mostAvaliable(void)
+void	Repairmen::addQueue(Event e)
 {
-	std::size_t	idx;
+	std::size_t	i, idx;
 	double		min_time;
 	double		time;
 
 	idx = 0;
-	min_time = 0;
-	for (std::size_t j = 0; j < _broken_machines[0].size(); j++)
-		min_time += _broken_machines[0].front().clk;
-	for (std::size_t i = 1; i < _broken_machines.size(); i++)
+	min_time = DBL_MAX;
+	i = 0;
+	for (Queue q : _broken_machines)
 	{
 		time = 0;
-		for (std::size_t j = 0; j < _broken_machines[i].size(); j++)
-			time += _broken_machines[j].front().clk;
+		for (Event ev : q)
+			time += ev.clk;
 		if (time < min_time)
 		{
-			idx = i;
 			min_time = time;
+			idx = i;
 		}
+		i++;
 	}
-	return (_broken_machines[idx]);
+	_broken_machines[idx].push(e);
 }

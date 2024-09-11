@@ -2,7 +2,7 @@
 
 Simulator::Simulator(int nMachines, int nRepairmen)
 :	_nMachines(nMachines), _nRepairmen(nRepairmen),
-	_mc(0), _rng(4242)
+	_mc(0), _rng(42)
 {
 	if (nMachines > 20 || nRepairmen > 10)
 		throw std::invalid_argument("nMachines > 20 or nRepairmen > 10");
@@ -14,15 +14,16 @@ Simulator::Simulator(int nMachines, int nRepairmen)
 
 void    Simulator::_display(void)
 {
-        std::cout << _mc << "\t";
-        for (auto it = _events.begin(), ite = _events.end(); it != ite; it++)
-        {
-                (it->clk < 0)
-                        ? std::cout <<  "-"
-                        : std::cout << it->clk;
-                std::cout << "\t";
-        }
-        _repairmen.display();
+	std::cout << std::fixed << std::setprecision(4);
+	std::cout << _mc << "\t";
+	for (auto it = _events.begin(), ite = _events.end(); it != ite; it++)
+	{
+			(it->clk < 0)
+					? std::cout <<  "-"
+					: std::cout << it->clk;
+			std::cout << "\t";
+	}
+	_repairmen.display();
 }
 
 int Simulator::schedule_event(void)
@@ -74,7 +75,7 @@ DataCollector	Simulator::run(void)
 		{
 			dc[_eventId].push_back(_events[_eventId].clk); c1++;
 			_events[_eventId].clk = -1;
-			_repairmen.mostAvaliable().push({_eventId, _mc + _rng.generateOne(5)});
+			_repairmen.addQueue({_eventId, _mc + _rng.generateOne(5)});
 		}
 		else
 		{
