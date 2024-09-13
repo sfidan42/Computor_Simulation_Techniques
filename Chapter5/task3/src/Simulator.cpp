@@ -31,7 +31,7 @@ void	Simulator::setup_arrival(void)
 	if (_arr_time == _master_clock)
 	{
 		_stages[0].addPacket({_packet_id++, _master_clock, -1});
-		_arr_time += 100;
+		_arr_time += 150;
 		_stages[0].set_dep_time(_master_clock);
 	}
 }
@@ -65,14 +65,16 @@ void	Simulator::setup_status(void)
 		{
 			_stages[i].set_status(down);
 			_stages[i].unset_brk_down();
-			_stages[i].add_dep_time(150);
-			_stages[i].set_operational(_master_clock + i * 200);
+			_stages[i].add_dep_time(50);
+			double	opr = (1 - i) * 100;
+			_stages[i].set_operational(_master_clock + opr);
 		}
 		if (_stages[i].get_operational() == _master_clock)
 		{
 			_stages[i].unset_operational();
 			_stages[i].set_brk_down(_master_clock);
-			_stages[i].set_dep_time(_master_clock);
+			if (_stages[i].get_n_cust() != 0)
+				_stages[i].set_dep_time(_master_clock);
 		}
 		if (_stages[i].get_brk_down() < 0)
 			_stages[i].set_status(down);
@@ -115,18 +117,17 @@ void	Simulator::display(void)
 
 DataCollector	Simulator::run(void)
 {
-	unsigned int	max_events = 20000;
-
 	//std::cout << "\t------------------stage 1--------------------"
 	//	<< "\t---------------stage 2---------------\n"
 	//	<< "MC\tAT\t#Cust\tDT1\tBR1\tOP1\tStat1\t#Cust\tDT2\tBR2\tOP2\tStat2\n";
 	//display();
-	while (schedule() && max_events--)
+	while (schedule())
 	{
 		//display();
 		if (_dc.check())
 			break ;
 	}
 	_dc.clear(50, 1000);
+	std::cout << "Total data: " << _dc.size() << std::endl;
 	return (_dc);
 }

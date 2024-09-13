@@ -17,6 +17,7 @@ END		=	\033[0m
 
 all: out $(EXE)
 	@echo "$(GREEN)MK > Running $(YELLOW)$(EXE)$(END)"
+	@./$(EXE)
 	@./$(EXE) > out/1_simulation.txt
 	@echo "$(GREEN)MK > Running $(YELLOW)correlogram.py$(END)"
 	@python3 correlogram.py > out/4_results.txt 2> /dev/null

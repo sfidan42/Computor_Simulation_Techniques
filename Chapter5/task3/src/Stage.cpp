@@ -16,15 +16,15 @@ packet	Stage::getPacket(void)
 	packet	p = _queue.front();
 
 	_queue.pop();
-	if (p.id < 10)
-		std::cout << "\033[31mS{" << _id << "} --> \033[32mP{" << p.id << "}\033[0m" << std::endl;
+	//if (p.id < 10)
+	//	std::cout << "\033[31mS{" << _id << "} --> \033[32mP{" << p.id << "}\033[0m" << std::endl;
 	return (p);
 }
 
 void	Stage::addPacket(packet p)
 {
-	if (p.id < 10)
-		std::cout << "\033[32mP{" << p.id << "} --> \033[31mS{" << _id << "}\033[0m" << std::endl;
+	//if (p.id < 10)
+	//	std::cout << "\033[32mP{" << p.id << "} --> \033[31mS{" << _id << "}\033[0m" << std::endl;
 	_queue.push(p);
 }
 
