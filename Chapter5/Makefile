@@ -1,5 +1,5 @@
 MK		=	make -s -C
-TASKS	=	task1 task2 task3 task4
+TASKS	=	task1 task2 task3
 
 all:
 	@for task in $(TASKS); do echo "starting..."; $(MK) $$task; done
