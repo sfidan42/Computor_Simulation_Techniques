@@ -1,0 +1,57 @@
+S		=	RNG.cpp Simulator.cpp Repairmen.cpp DataCollector.cpp
+O		=	$(S:.cpp=.o)
+SRC		=	$(addprefix src/, $(S))
+OBJ		=	$(addprefix int/, $(O))
+NAME	=	libtask.a
+EXE		=	run
+CPP		=	c++ -I. -Iinc -Wall -Wextra -Werror -std=c++17 -g
+LD		=	-L . -ltask
+DATASET = $(shell seq -f "out/2_%g_data.txt" 1 50)
+
+RED		=	\033[0;31m
+GREEN	=	\033[0;32m
+YELLOW	=	\033[0;33m
+BLUE	=	\033[0;34m
+CYAN	=	\033[0;36m
+WHITE	=	\033[0;37m
+END		=	\033[0m
+
+all: out $(EXE)
+	@echo "$(GREEN)MK > Running $(YELLOW)$(EXE)$(END)"
+	@./$(EXE) > out/1_simulation.txt
+	@echo "$(GREEN)MK > Running $(YELLOW)correlogram.py$(END)"
+	@python3 correlogram.py $(DATASET)
+	@echo "$(GREEN)MK > Results saved in $(YELLOW)out/*$(END)"
+
+out:
+	@mkdir -p out
+
+int/%.o: src/%.cpp inc/%.hpp
+	@echo "$(GREEN)MK > Compiling $(BLUE)$<$(END) -> $(YELLOW)$@$(END)"
+	@$(CPP) -c $< -o $@
+
+int:
+	@mkdir -p int
+
+$(NAME): int $(OBJ)
+	@ar rcs $(NAME) $(OBJ)
+	@echo "$(GREEN)MK > Library created: $(YELLOW)$(NAME)$(END)"
+
+$(EXE): main.cpp $(NAME)
+	@$(CPP) main.cpp $(LD) -o $(EXE)
+	@echo "$(GREEN)MK > Executable created: $(YELLOW)$(EXE)$(END)"
+
+clean:
+	@echo "$(RED)MK > Removing object files$(END)"
+	@echo "$(RED)MK > Removing output files$(END)"
+	@rm -rf int
+
+fclean: clean
+	@echo "$(RED)MK > Removing the executable$(END)"
+	@echo "$(RED)MK > Removing the archive file$(END)"
+	@echo "$(RED)MK > Removing the outputs$(END)"
+	@rm -rf $(EXE) $(NAME) out
+
+re: fclean all
+
+.PHONY: all clean fclean re
