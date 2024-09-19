@@ -17,10 +17,10 @@ double	Simulator::locateEvent(void)
 	_event = None;
 	for (uint i = 0; i < 3; i++)
 	{
-		if (_q[i].first < min_clock && _q[i].first >= 0)
+		if (_q[i].arr < min_clock && _q[i].arr >= 0)
 		{
 			_event = Arrival;
-			min_clock = _q[i].first;
+			min_clock = _q[i].arr;
 		}
 	}
 	if (_t.arr_next() < min_clock && _t.arr_next() >= 0)
@@ -28,9 +28,9 @@ double	Simulator::locateEvent(void)
 		_event = ArrivalNextQueue;
 		min_clock = _t.arr_next();
 	}
-	if (_q[_t.node_id() - 1].second < min_clock && _q[_t.node_id() - 1].second >= 0)
+	if (_q[_t.node_id() - 1].dep < min_clock && _q[_t.node_id() - 1].dep >= 0)
 	{
-		min_clock = _q[_t.node_id() - 1].second;
+		min_clock = _q[_t.node_id() - 1].dep;
 		_event = ServiceCompletion;
 	}
 	return (min_clock);
@@ -43,9 +43,9 @@ bool	Simulator::schedule(void)
 		throw (std::runtime_error("Error: MC is negative, simulation abort!"));
 	for (uint i = 0; i < 3; i++)
 	{
-		if (_q[i].first == _master_clock)
+		if (_q[i].arr == _master_clock)
 		{
-			_q[i].first += (rand() % 2000) / 100.0 + 10;
+			_q[i].arr += (rand() % 2000) / 100.0 + 10;
 			_q.incSize(i);
 			if (i == 0)
 				_dc.setArr(_master_clock);
@@ -60,9 +60,9 @@ bool	Simulator::schedule(void)
 		else
 		{
 			_t.arr_next_unset();
-			if (_q[_t.node_id() - 1].second < 0)
+			if (_q[_t.node_id() - 1].dep < 0)
 			{
-				_q[_t.node_id() - 1].second = _master_clock + (rand() % 500) / 100.0 + 2.5;
+				_q[_t.node_id() - 1].dep = _master_clock + (rand() % 500) / 100.0 + 2.5;
 				_t.tout_clock_set(_master_clock);
 			}
 		}
@@ -75,7 +75,7 @@ bool	Simulator::schedule(void)
 		if (_q.getSize(_t.node_id() - 1) == 0)
 		{
 			_t.tout_clock_unset();
-			_q[_t.node_id() - 1].second = -1;
+			_q[_t.node_id() - 1].dep = -1;
 			_t.arr_next_set(_master_clock);
 		}
 		else if (_t.tout_clock() < 0 && _t.arr_next() < 0)
@@ -84,9 +84,9 @@ bool	Simulator::schedule(void)
 		}
 		else
 		{
-			_q[_t.node_id() - 1].second =_master_clock + (rand() % 500) / 100.0 + 2.5;
+			_q[_t.node_id() - 1].dep =_master_clock + (rand() % 500) / 100.0 + 2.5;
 		}
-		if (_q[_t.node_id() - 1].second > _t.tout_clock())
+		if (_q[_t.node_id() - 1].dep > _t.tout_clock())
 		{
 			_t.tout_clock_unset();
 			//std::cout << "___TIMEOUT!___" << std::endl;

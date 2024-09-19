@@ -1,0 +1,10 @@
+Number of data points: 1000
+Sample size is sufficient.
+Correlogram saved as correlogram.png
+------------------------------------------------
+Best batch size: 30 with correlation ratio: 0.000663414428491457
+Number of all batches: 33
+Number of batches: 30
+Mean: 5.432688888888889
+Standard deviation: 0.2828035954160537
+Confidence interval: [ 5.331488921967637 , 5.533888855810142 ]
