@@ -28,6 +28,7 @@ public:
 	bool				check(std::size_t first, std::size_t exception_size);
 	void				clear(std::size_t first, std::size_t exception_size);
 	void				setArr(double t_arr);
+	void				setStart(double t_start);
 	void				setDep(double t_arr);
 	std::size_t			size(void) const;
 	void				display(void);

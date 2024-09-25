@@ -15,12 +15,14 @@ DataCollector::DataCollector(const DataCollector &dc)
 
 bool	DataCollector::check(std::size_t first, std::size_t exception_size)
 {
-	std::size_t						realSize;
+	std::size_t	realSize;
 	
 	realSize = this->size();
 	for (auto it = _data.rbegin(); it != _data.rend() && it->t_dep < 0; ++it)
 		realSize--;
-	return (realSize >= (first + exception_size));
+	return (realSize >= (first + exception_size + 10)
+		&& _data.back().t_dep >= 0
+		&& _data.back().t_start >= 0);
 }
 
 DataCollector	&DataCollector::operator=(const DataCollector &dc)
@@ -43,11 +45,16 @@ void	DataCollector::setArr(double t_arr)
 	_data.push_back(p);
 }
 
+void	DataCollector::setStart(double t_start)
+{
+	static unsigned int	i;
+	_data[i++].t_start = t_start;
+}
+
 void	DataCollector::setDep(double t_dep)
 {
-	for (packet &p : _data)
-		if (p.t_dep < 0)
-			p.t_dep = t_dep;
+	static unsigned int	i;
+	_data[i++].t_dep = t_dep;
 }
 
 void	DataCollector::clear(std::size_t first, std::size_t exception_size)
@@ -67,9 +74,9 @@ void	DataCollector::display(void)
 	for (packet p : _data)
 		std::cout << p.t_dep - p.t_arr << " ";
 	std::cout << std::endl;
-	std::cout << "_______queue 1 (arr, dep) times_______" << std::endl;
+	std::cout << "_______queue 1 (arr, start, dep) times_______" << std::endl;
 	for (packet p : _data)
-		std::cout << "(" << p.t_arr << ", " << p.t_dep << ") ";
+		std::cout << "(" << p.t_arr << ", " << p.t_start << ", " << p.t_dep << ") ";
 	std::cout << std::endl;
 	std::cout << "_________total data_________" << std::endl;
 	std::cout << this->size() << std::endl;
@@ -105,7 +112,7 @@ void	DataCollector::saveWT(const char *filename) const
 	if (!file.is_open())
 		throw std::runtime_error("DataCollector::saveWT: could not open file!");
 	for (packet p : _data)
-			file << p.t_dep - p.t_arr << std::endl;
+			file << p.t_dep - p.t_start << std::endl;
 	file.close();
 }
 
@@ -115,7 +122,10 @@ void	DataCollector::saveArrDep(const char *filename) const
 
 	if (!file.is_open())
 		throw std::runtime_error("DataCollector::saveArrDep: could not open file!");
+	file << "arr, dep, start" << std::endl;
 	for (auto it = _data.begin(), ite = _data.end() - 1; it != ite; it++)
-		file << (it + 1)->t_arr - it->t_arr << ", " << (it + 1)->t_dep - (it + 1)->t_arr << std::endl;
+		file << (it + 1)->t_arr - it->t_arr << ", "
+			<< (it + 1)->t_dep - (it + 1)->t_arr << ", "
+			<< (it + 1)->t_dep - (it + 1)->t_start << std::endl;
 	file.close();
 }

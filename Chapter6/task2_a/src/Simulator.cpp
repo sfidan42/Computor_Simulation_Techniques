@@ -45,7 +45,7 @@ bool	Simulator::schedule(void)
 	{
 		if (_q[i].arr == _master_clock)
 		{
-			_q[i].arr += (rand() % 2000) / 100.0 + 10;
+			_q[i].arr = _master_clock + (rand() % 4000) / 100.0;
 			_q.incSize(i);
 			if (i == 0)
 				_dc.setArr(_master_clock);
@@ -62,7 +62,9 @@ bool	Simulator::schedule(void)
 			_t.arr_next_unset();
 			if (_q[_t.node_id() - 1].dep < 0)
 			{
-				_q[_t.node_id() - 1].dep = _master_clock + (rand() % 500) / 100.0 + 2.5;
+				_q[_t.node_id() - 1].dep = _master_clock + (rand() % 1000) / 100.0;
+				if (_t.node_id() == 1)
+					_dc.setStart(_master_clock);
 				_t.tout_clock_set(_master_clock);
 			}
 		}
@@ -84,7 +86,9 @@ bool	Simulator::schedule(void)
 		}
 		else
 		{
-			_q[_t.node_id() - 1].dep =_master_clock + (rand() % 500) / 100.0 + 2.5;
+			_q[_t.node_id() - 1].dep =_master_clock + (rand() % 1000) / 100.0;
+			if (_t.node_id() == 1)
+				_dc.setStart(_master_clock);
 		}
 		if (_q[_t.node_id() - 1].dep > _t.tout_clock())
 		{
