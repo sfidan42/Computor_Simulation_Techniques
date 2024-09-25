@@ -76,7 +76,11 @@ void	DataCollector::display(void)
 	std::cout << std::endl;
 	std::cout << "_______queue 1 (arr, start, dep) times_______" << std::endl;
 	for (packet p : _data)
+	{
 		std::cout << "(" << p.t_arr << ", " << p.t_start << ", " << p.t_dep << ") ";
+		if (p.t_start > p.t_dep)
+			throw (std::runtime_error("DataCollector::display: start > dep"));
+	}
 	std::cout << std::endl;
 	std::cout << "_________total data_________" << std::endl;
 	std::cout << this->size() << std::endl;

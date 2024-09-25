@@ -45,7 +45,7 @@ bool	Simulator::schedule(void)
 	{
 		if (_q[i].arr == _master_clock)
 		{
-			_q[i].arr = _master_clock + (rand() % 4000) / 100.0;
+			_q[i].arr = _master_clock + (rand() % 2000) / 100.0 + 10;
 			_q.incSize(i);
 			if (i == 0)
 				_dc.setArr(_master_clock);
@@ -62,7 +62,7 @@ bool	Simulator::schedule(void)
 			_t.arr_next_unset();
 			if (_q[_t.node_id() - 1].dep < 0)
 			{
-				_q[_t.node_id() - 1].dep = _master_clock + (rand() % 1000) / 100.0;
+				_q[_t.node_id() - 1].dep = _master_clock + (rand() % 500) / 100.0 + 2.5;
 				if (_t.node_id() == 1)
 					_dc.setStart(_master_clock);
 				_t.tout_clock_set(_master_clock);
@@ -86,7 +86,7 @@ bool	Simulator::schedule(void)
 		}
 		else
 		{
-			_q[_t.node_id() - 1].dep =_master_clock + (rand() % 1000) / 100.0;
+			_q[_t.node_id() - 1].dep =_master_clock + (rand() % 1000) / 200.0 + 2.5;
 			if (_t.node_id() == 1)
 				_dc.setStart(_master_clock);
 		}
@@ -108,15 +108,18 @@ void	Simulator::display(void)
 	_q.display();
 	_t.display();
 }
-
+//(2931.44, 2939.98, 2948.22)
+//(2936.35, 2948.22, 2948.22)
+//(2937.11, 2955.32, 2948.32)
 DataCollector	Simulator::run(void)
 {
-	//std::cout << "\t-------Queue1-------" << "\t-------Queue2-------" << "\t-------Queue3-------" << "\t--------Token-------" << std::endl;
-	//std::cout << "MC\tArr\tDep\tSize\tArr\tDep\tSize\tArr\tDep\tSize\tNode\tTout\tNext" << std::endl;
-	//this->display();
+	std::cout << "\t-------Queue1-------" << "\t-------Queue2-------" << "\t-------Queue3-------" << "\t--------Token-------" << std::endl;
+	std::cout << "MC\tArr\tDep\tSize\tArr\tDep\tSize\tArr\tDep\tSize\tNode\tTout\tNext" << std::endl;
+	this->display();
 	while(this->schedule() && !_dc.check(50, 1000))
 	{
-		//this->display();
+		if (_master_clock < 100)
+			this->display();
 	}
 	_dc.clear(50, 1000);
 	return (_dc);

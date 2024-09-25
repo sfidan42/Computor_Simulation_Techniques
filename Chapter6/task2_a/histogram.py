@@ -40,4 +40,4 @@ with open('out/data.csv') as f:
 
     print("mean arrival time:", sum(arrivals) / len(arrivals))
     print("mean departure time:", sum(departures) / len(departures))
-    print("mean waiting time:", )
+    print("mean waiting time:", sum(starts) / len(starts))
