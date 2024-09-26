@@ -107,16 +107,16 @@ void	Simulator::display(void)
 DataCollector	Simulator::run(void)
 {
 	int i = 0;
-	std::cout << "MC\tArr\tDep\tSize\tArr\tDep\tSize\tArr\tDep\tSize\tNode\tTout\tNext" << std::endl;
-	std::cout << "\t-------Queue1-------" << "\t-------Queue2-------" << "\t-------Queue3-------" << "\t--------Token-------" << std::endl;
-	this->display();
+	//std::cout << "MC\tArr\tDep\tSize\tArr\tDep\tSize\tArr\tDep\tSize\tNode\tTout\tNext" << std::endl;
+	//std::cout << "\t-------Queue1-------" << "\t-------Queue2-------" << "\t-------Queue3-------" << "\t--------Token-------" << std::endl;
+	//this->display();
 	while(this->schedule() && !_dc.check(50, 1000))
 	{
-		if (_master_clock < 100)
-			this->display();
+		//if (_master_clock < 100)
+		//	this->display();
 		i++;
 	}
-//	_dc.clear(50, 1000);
+	_dc.clear(50, 1000);
 	std::cout << "Loop: " << i << std::endl;
 	return (_dc);
 }

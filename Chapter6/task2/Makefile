@@ -17,10 +17,14 @@ END		=	\033[0m
 
 all: out $(EXE)
 	@echo "$(GREEN)MK > Running $(YELLOW)$(EXE)$(END)"
-	@./$(EXE)
-# > out/1_simulation.txt
+	@./$(EXE) > out/output.txt
 	@echo "$(GREEN)MK > Running $(YELLOW)correlogram.py$(END)"
-	@python3 correlogram.py > out/4_results.txt 2> /dev/null
+	@python3 correlogram.py > out/results.txt
+	@echo "$(GREEN)MK > Plot the histograms of arr&dep times$(END)"
+	@python3 histogram.py
+	@echo "$(GREEN)MK > Calculate the mean waiting time of an M/M/1 queue with an arrival rate equal to the sum of the arrival rates to the three queues, i.e., λ=0.15, and a mean service time of 2.$(END)"
+	@echo -n "W = 1 / (µ - λ) = 1 / (0.5 - 0.15) = "
+	@echo "1/(.5-.15)" | bc -l
 	@echo "$(GREEN)MK > Results saved in $(YELLOW)out/*$(END)"
 
 int/%.o: src/%.cpp inc/%.hpp

@@ -12,7 +12,7 @@ double	Token::tout_clock(void) { return (_tout_clock); }
 void	Token::tout_clock_set(double master_clock) { _tout_clock = master_clock + 15; }
 void	Token::tout_clock_unset(void) { _tout_clock = -1; }
 double	Token::arr_next(void) { return (_arr_next); }
-void	Token::arr_next_set(double master_clock) { _arr_next = master_clock + 1; }
+void	Token::arr_next_set(double master_clock) { _arr_next = master_clock + 0.001; }
 void	Token::arr_next_unset(void) { _arr_next = -1; }
 
 void	Token::next(void)

@@ -73,10 +73,10 @@ void	DataCollector::setDep(double t_dep, std::size_t i)
 
 void	DataCollector::clear(std::size_t first, std::size_t exception_size)
 {
-	while (first--)
-		_data[first % 3].erase(_data[first % 3].begin());
-	while (exception_size--)
-		_data[exception_size % 3].erase(_data[exception_size % 3].end() - 1);
+	for (std::size_t i = 0; i < first; i++)
+		_data[i % 3].erase(_data[i % 3].begin());
+	for (std::size_t i = exception_size, n = this->size(); i < n; i++)
+		_data[i % 3].pop_back();
 }
 
 std::size_t	DataCollector::size(void) const
@@ -120,7 +120,7 @@ void	DataCollector::_mean(void)
 	_m = 0;
 	for (std::size_t i = 0; i < 3; i++)
 		for (packet p : _data[i])
-			_m += (p.t_dep - p.t_arr);
+			_m += (p.t_start - p.t_arr);
 	_m /= this->size();
 	std::cout << "Mean of waiting time: " << _m << std::endl;
 }
@@ -132,7 +132,7 @@ void	DataCollector::_stdDev(void)
 	variance = 0;
 	for (std::size_t i = 0; i < 3; i++)
 		for (packet p : _data[i])
-			variance += std::pow((p.t_dep - p.t_arr) - _m, 2);
+			variance += std::pow((p.t_start - p.t_arr) - _m, 2);
 	_sd = std::sqrt(variance / this->size());
 	std::cout << "StdDev of waiting time: " << _sd << std::endl;
 }
@@ -145,7 +145,7 @@ void	DataCollector::saveWT(const char *filename) const
 		throw std::runtime_error("DataCollector::saveWT: could not open file!");
 	for (std::size_t i = 0; i < 3; i++)
 		for (packet p : _data[i])
-			file << p.t_dep - p.t_start << std::endl;
+			file << p.t_start - p.t_arr << std::endl;
 	file.close();
 }
 
@@ -155,11 +155,12 @@ void	DataCollector::saveArrDep(const char *filename) const
 
 	if (!file.is_open())
 		throw std::runtime_error("DataCollector::saveArrDep: could not open file!");
-	file << "arr, dep, start" << std::endl;
+	file << "arr, start, dep, service" << std::endl;
 	for (std::size_t i = 0; i < 3; i++)
-		for (auto it = _data[i].begin(), ite = _data[i].end() - 1; it != ite; it++)
-			file << (it + 1)->t_arr - it->t_arr << ", "
-				<< (it + 1)->t_dep - (it + 1)->t_arr << ", "
-				<< (it + 1)->t_dep - (it + 1)->t_start << std::endl;
+		for (auto it = _data[i].begin() + 1, ite = _data[i].end(); it != ite; it++)
+			file << it->t_arr - (it - 1)->t_arr << ", "
+				<< it->t_start - it->t_arr << ", "
+				<< it->t_dep - it->t_arr << ", "
+				<< it->t_dep - it->t_start <<std::endl;
 	file.close();
 }
