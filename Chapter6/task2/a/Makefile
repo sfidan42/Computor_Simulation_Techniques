@@ -16,14 +16,16 @@ WHITE	=	\033[0;37m
 END		=	\033[0m
 
 all: out/ $(EXE)
+	@echo "$(GREEN)MK > Running $(YELLOW)$(EXE)$(END)"
 	@./$(EXE) > out/output.txt
+	@echo "$(GREEN)MK > Running $(YELLOW)correlogram.py$(END)"
 	@python3 correlogram.py > out/results.txt
-	@echo "$(GREEN)MK > Results saved in $(YELLOW)out/*$(END)"
-	@echo "$(GREEN)MK > Calculate mean waiting time in m/m/1:$(END)"
-	@echo -n "Wq = lambda / (mu * (mu - lambda)), so Wq = "
-	@echo "1 / 20 / (1 / 5 * (1 / 5 - 1 / 20))" | bc -l
 	@echo "$(GREEN)MK > Plot the histograms of arr&dep times$(END)"
 	@python3 histogram.py
+	@echo "$(GREEN)MK > Calculate mean waiting time in m/m/1:$(END)"
+	@echo -n "W = 1 / (µ - λ), so W = "
+	@echo "1 / (1/5 - 1/20)" | bc -l
+	@echo "$(GREEN)MK > Results saved in $(YELLOW)out/*$(END)"
 
 int/%.o: src/%.cpp inc/%.hpp
 	@echo "$(GREEN)MK > Compiling $(BLUE)$<$(END) -> $(YELLOW)$@$(END)"

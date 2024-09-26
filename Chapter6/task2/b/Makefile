@@ -15,7 +15,7 @@ CYAN	=	\033[0;36m
 WHITE	=	\033[0;37m
 END		=	\033[0m
 
-all: out $(EXE)
+all: out/ $(EXE)
 	@echo "$(GREEN)MK > Running $(YELLOW)$(EXE)$(END)"
 	@./$(EXE) > out/output.txt
 	@echo "$(GREEN)MK > Running $(YELLOW)correlogram.py$(END)"
@@ -23,21 +23,18 @@ all: out $(EXE)
 	@echo "$(GREEN)MK > Plot the histograms of arr&dep times$(END)"
 	@python3 histogram.py
 	@echo "$(GREEN)MK > Calculate the mean waiting time of an M/M/1 queue with an arrival rate equal to the sum of the arrival rates to the three queues, i.e., λ=0.15, and a mean service time of 2.$(END)"
-	@echo -n "W = 1 / (µ - λ) = 1 / (0.5 - 0.15) = "
-	@echo "1/(.5-.15)" | bc -l
+	@echo -n "W = 1 / (µ - λ), so W = "
+	@echo "1 / (1/2 - 0.15)" | bc -l
 	@echo "$(GREEN)MK > Results saved in $(YELLOW)out/*$(END)"
 
 int/%.o: src/%.cpp inc/%.hpp
 	@echo "$(GREEN)MK > Compiling $(BLUE)$<$(END) -> $(YELLOW)$@$(END)"
 	@$(CPP) -c $< -o $@
 
-int:
-	@mkdir -p int
+%/:
+	@mkdir -p $@
 
-out:
-	@mkdir -p out
-
-$(NAME): int $(OBJ)
+$(NAME): int/ $(OBJ)
 	@ar rcs $(NAME) $(OBJ)
 	@echo "$(GREEN)MK > Library created: $(YELLOW)$(NAME)$(END)"
 
