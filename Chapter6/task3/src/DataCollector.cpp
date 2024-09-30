@@ -3,14 +3,14 @@
 DataCollector::DataCollector(void)
 {
 	_m = 0;
-	_stdDev = 0;
+	_sd = 0;
 }
 
 DataCollector::DataCollector(const DataCollector &dc)
 {
 	_data = dc._data;
 	_m = dc._m;
-	_stdDev = dc._stdDev;
+	_sd = dc._sd;
 }
 
 bool	DataCollector::check(void)
@@ -25,7 +25,7 @@ DataCollector	&DataCollector::operator=(const DataCollector &dc)
 	{
 		_data = dc._data;
 		_m = dc._m;
-		_stdDev = dc._stdDev;
+		_sd = dc._sd;
 	}
 	return (*this);
 }
@@ -61,7 +61,7 @@ void	DataCollector::display(void)
 	std::cout << this->size() << std::endl;
 	std::cout << "______final statistics______" << std::endl;
 	this->_mean();
-	this->_standardDeviation();
+	this->_stdDev();
 }
 
 void	DataCollector::_mean(void)
@@ -73,15 +73,15 @@ void	DataCollector::_mean(void)
 	std::cout << "Mean: " << _m << std::endl;
 }
 
-void	DataCollector::_standardDeviation(void)
+void	DataCollector::_stdDev(void)
 {
 	double	variance;
 
 	variance = 0;
 	for (packet p : _data)
 		variance += std::pow((p.t_dep - p.t_arr) - _m, 2);
-	_stdDev = std::sqrt(variance / this->size());
-	std::cout << "Standard deviation: " << _stdDev << std::endl;
+	_sd = std::sqrt(variance / this->size());
+	std::cout << "Standard deviation: " << _sd << std::endl;
 }
 
 void	DataCollector::save(const char *filename) const

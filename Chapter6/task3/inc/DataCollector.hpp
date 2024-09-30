@@ -16,11 +16,11 @@ class DataCollector
 {
 private:
 	double				_m;
-	double				_stdDev;
+	double				_sd;
 private:
 	std::vector<packet>	_data;
 	void				_mean(void);
-	void				_standardDeviation(void);
+	void				_stdDev(void);
 public:
 	DataCollector(void);
 	DataCollector(const DataCollector &dc);
