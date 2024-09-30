@@ -1,7 +1,9 @@
 S		=	Simulator.cpp Stage.cpp DataCollector.cpp
 O		=	$(S:.cpp=.o)
+H		=	$(S:.cpp=.hpp)
 SRC		=	$(addprefix src/, $(S))
 OBJ		=	$(addprefix int/, $(O))
+HDR		=	$(addprefix inc/, $(H))
 NAME	=	libtask.a
 EXE		=	run
 CPP		=	c++ -I. -Iinc -Wall -Wextra -Werror -std=c++17 -g
@@ -37,7 +39,7 @@ $(NAME): int $(OBJ)
 	@ar rcs $(NAME) $(OBJ)
 	@echo "$(GREEN)MK > Library created: $(YELLOW)$(NAME)$(END)"
 
-$(EXE): main.cpp $(NAME)
+$(EXE): main.cpp $(NAME) $(HDR)
 	@$(CPP) main.cpp $(LD) -o $(EXE)
 	@echo "$(GREEN)MK > Executable created: $(YELLOW)$(EXE)$(END)"
 

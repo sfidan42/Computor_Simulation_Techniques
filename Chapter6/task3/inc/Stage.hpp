@@ -12,7 +12,11 @@ typedef struct s_StageMeanValues
 	double	dep;
 	double	brk;
 	double	opr;
-}			StageMeanValues;
+}	StageMeanValues;
+
+double	getDep(const StageMeanValues &m);
+double	getBrk(const StageMeanValues &m);
+double	getOpr(const StageMeanValues &m);
 
 class Stage
 {
@@ -35,16 +39,16 @@ public:
 	void		addPacket(packet p);
 public:
 	double	get_dep_time(void) const { return (_dep_time); }
-	void	set_dep_time(double master_clock) { if (isAvaliable()) _dep_time = master_clock + _mean_values.dep; }
+	void	set_dep_time(double master_clock) { if (isAvaliable()) _dep_time = master_clock + getDep(_mean_values); }
 	void	unset_dep_time(void) { _dep_time = -1; }
 	void	add_dep_time(double time) { if (_dep_time >= 0) _dep_time += time; }
 public:
 	double	get_brk_down(void) const { return (_brk_down); }
-	void	set_brk_down(double master_clock) { _brk_down = master_clock + _mean_values.brk; }
+	void	set_brk_down(double master_clock) { _brk_down = master_clock + getBrk(_mean_values); }
 	void	unset_brk_down(void) { _brk_down = -1; }
 public:
 	double	get_operational(void) const { return (_operational); }
-	void	set_operational(double master_clock) { _operational = master_clock + _mean_values.opr; }
+	void	set_operational(double master_clock) { _operational = master_clock + getOpr(_mean_values);}
 	void	unset_operational(void) { _operational = -1; }
 public:
 	e_status_type	get_status(void) const { return (_status); }

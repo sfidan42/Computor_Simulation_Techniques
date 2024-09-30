@@ -4,9 +4,13 @@ int	main(void)
 {
 	try
 	{
-		Simulator	sim;
+		Simulator		sim;
+		StageMeanValues	m1 = {20, 200, 50};
+		StageMeanValues	m2 = {30, 300, 150};
 
-		sim.setMeanValues(40, 20, 30, 200, 300, 50, 150);
+		m1.opr /= m1.dep;
+		m2.opr /= m2.dep;
+		sim.setMeanValues(40, m1, m2);
 		DataCollector dc = sim.run();
 		dc.display();
 		dc.save("out/2_data.txt");

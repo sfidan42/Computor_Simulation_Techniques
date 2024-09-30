@@ -1,5 +1,11 @@
 #include <Stage.hpp>
 
+double	getDep(const StageMeanValues &m) { return (rand() % (int)(2 * m.dep)); }
+
+double	getBrk(const StageMeanValues &m) { return (rand() % (int)(2 * m.brk)); }
+
+double	getOpr(const StageMeanValues &m) { return (rand() % (int)(2 * m.opr)); }
+
 Stage::Stage(double dep, double brk, double opr)
 {
 	static int id;
@@ -11,10 +17,10 @@ Stage::Stage(double dep, double brk, double opr)
 	_id = id++;
 	switch (this->_id)
 	{
-		case 0: _mean_values = {20, 200, 50}; break;
-		case 1: _mean_values = {30, 300, 150}; break;
-		default: break;
-	}
+		case 0: _mean_values = {20., 200., 50.0 / 20.0}; break;
+		case 1: _mean_values = {30., 300., 150.}; break;
+		default: std::cout << "Stage id is wrong" << std::endl; break;
+	} // these are default values, can be changed via set_mean_values function!
 }
 
 packet	Stage::getPacket(void)

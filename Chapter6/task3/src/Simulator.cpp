@@ -37,15 +37,17 @@ void	Simulator::find_event(void)
 	}
 	if (_stages[0].get_dep_time() == _master_clock)
 	{
-		_stages[0].unset_dep_time();
 		_stages[1].addPacket(_stages[0].getPacket());
 		_stages[1].set_dep_time(_master_clock);
+		if (_stages[0].get_n_cust() == 0)
+			_stages[0].unset_dep_time();
 	}
 	if (_stages[1].get_dep_time() == _master_clock)
 	{
-		_stages[1].unset_dep_time();
 		packet	p = _stages[1].getPacket();
 		p.t_dep = _master_clock;
+		if (_stages[1].get_n_cust() == 0)
+			_stages[1].unset_dep_time();
 		_dc.addPacket(p);
 	}
 	_stages[0].set_status(idle);
@@ -58,7 +60,7 @@ void	Simulator::find_event(void)
 		{
 			_stages[i].set_status(down);
 			_stages[i].unset_brk_down();
-			_stages[i].add_dep_time(50);
+			//_stages[i].add_dep_time(_stages[i].get_operational() + _master_clock);
 			_stages[i].set_operational(_master_clock);
 		}
 		if (_stages[i].get_operational() == _master_clock)
@@ -71,8 +73,8 @@ void	Simulator::find_event(void)
 		if (_stages[i].get_brk_down() < 0)
 			_stages[i].set_status(down);
 	}
-	if (_stages[1].get_n_cust() >= 4)
-		_stages[0].set_status(blocked);
+	//if (_stages[1].get_n_cust() >= 4)
+	//	_stages[0].set_status(blocked);
 }
 
 bool	Simulator::schedule(void)

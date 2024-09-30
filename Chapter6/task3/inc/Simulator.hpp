@@ -27,10 +27,10 @@ private:
 public:
 	Simulator(void);
 	DataCollector	run(void);
-	void	setMeanValues(double time, double serv1, double serv2, double brk1, double brk2, double opr1, double opr2)
+	void	setMeanValues(double time, StageMeanValues &m1, StageMeanValues &m2)
 	{
 		_mean_arr_time = time;
-		_stages[0].set_mean_values(serv1, brk1, opr1);
-		_stages[1].set_mean_values(serv2, brk2, opr2);
+		_stages[0].set_mean_values(m1.dep, m1.brk, m1.opr);
+		_stages[1].set_mean_values(m2.dep, m2.brk, m2.opr);
 	}
 };

@@ -90,8 +90,7 @@ void	DataCollector::save(const char *filename) const
 
 	if (!file.is_open())
 		throw std::runtime_error("DataCollector::save: could not open file!");
-	for (int i = 0; i < 3; i++)
-		for (packet p : _data)
-			file << p.t_dep - p.t_arr << std::endl;
+	for (packet p : _data)
+		file << p.t_dep - p.t_arr << std::endl;
 	file.close();
 }
