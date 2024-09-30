@@ -6,6 +6,7 @@ Simulator::Simulator(void) : _stages{Stage(-1, 80, -1), Stage(-1, 90, -1)}
 	_arr_time = 10;
 	_mean_arr_time = 40;
 	_packet_id = 0;
+	_capacity = 4;
 }
 
 void	Simulator::update_master_clock(void)
@@ -31,7 +32,7 @@ void	Simulator::find_event(void)
 {
 	if (_arr_time == _master_clock)
 	{
-		_stages[0].addPacket({_packet_id++, _master_clock, -1});
+		_stages[0].addPacket({_packet_id++, _master_clock, -1, -1});
 		this->update_arrival_time();
 		_stages[0].set_dep_time(_master_clock);
 	}
@@ -73,8 +74,8 @@ void	Simulator::find_event(void)
 		if (_stages[i].get_brk_down() < 0)
 			_stages[i].set_status(down);
 	}
-	//if (_stages[1].get_n_cust() >= 4)
-	//	_stages[0].set_status(blocked);
+	if (_stages[1].get_n_cust() > _capacity)
+		_stages[0].set_status(blocked);
 }
 
 bool	Simulator::schedule(void)
@@ -107,21 +108,20 @@ void	Simulator::display(void)
 	std::cout << _stages[0] << "\t" << _stages[1] << std::endl;
 }
 
-DataCollector	Simulator::run(void)
+DataCollector	Simulator::run(int cap)
 {
-	int loop = 0;
-	std::cout << "\t------------------stage 1--------------------"
-		<< "\t---------------stage 2---------------\n"
-		<< "MC\tAT\t#Cust\tDT1\tBR1\tOP1\tStat1\t#Cust\tDT2\tBR2\tOP2\tStat2\n";
-	this->display();
+	_capacity = cap;
+	//int loop = 0;
+	//std::cout << "\t------------------stage 1--------------------"
+	//	<< "\t---------------stage 2---------------\n"
+	//	<< "MC\tAT\t#Cust\tDT1\tBR1\tOP1\tStat1\t#Cust\tDT2\tBR2\tOP2\tStat2\n";
+	//this->display();
 	while (schedule())
 	{
-		if (loop++ < 30)
-			this->display();
+		//this->display();
 		if (_dc.check())
 			break ;
 	}
 	_dc.clear(50, 1000);
-	std::cout << "Total data: " << _dc.size() << std::endl;
 	return (_dc);
 }

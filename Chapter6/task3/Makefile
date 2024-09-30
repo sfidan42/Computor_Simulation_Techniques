@@ -19,11 +19,17 @@ END		=	\033[0m
 
 all: out $(EXE)
 	@echo "$(GREEN)MK > Running $(YELLOW)$(EXE)$(END)"
-	@./$(EXE)
-	@./$(EXE) > out/1_simulation.txt
+	@./$(EXE) > out/output.txt
 	@echo "$(GREEN)MK > Running $(YELLOW)correlogram.py$(END)"
-	@python3 correlogram.py > out/4_results.txt 2> /dev/null
+	@python3 correlogram.py > out/results.txt
 	@echo "$(GREEN)MK > Results saved in $(YELLOW)out/*$(END)"
+	@echo "$(GREEN)MK > Calculating $(END)"
+	@echo -n "$(GREEN)MK > $(YELLOW)W1 = 1 / [(β1µ1 /(α1 + β1 )) - λ ]: $(END)"
+	@echo "1 / (1/2.5 * 1/20 / (1/200 + 1/2.5) - 1/40)" | bc -l
+	@echo -n "$(GREEN)MK > $(YELLOW)W2 = 1 / [(β2µ2 /(α2 + β2 )) - λ ]: $(END)"
+	@echo "1 / (1/5 * 1/30 / (1/300 + 1/5) - 1/40)" | bc -l
+	@echo "$(GREEN)MK > Plotting the scatter plot of waiting time vs. queue size$(END)"
+	@python3 plot.py
 
 int/%.o: src/%.cpp inc/%.hpp
 	@echo "$(GREEN)MK > Compiling $(BLUE)$<$(END) -> $(YELLOW)$@$(END)"

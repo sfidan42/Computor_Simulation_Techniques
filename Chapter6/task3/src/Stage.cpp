@@ -15,11 +15,10 @@ Stage::Stage(double dep, double brk, double opr)
 	_operational = opr;
 	_status = idle;
 	_id = id++;
-	switch (this->_id)
+	switch (this->_id % 2)
 	{
 		case 0: _mean_values = {20., 200., 50.0 / 20.0}; break;
 		case 1: _mean_values = {30., 300., 150.}; break;
-		default: std::cout << "Stage id is wrong" << std::endl; break;
 	} // these are default values, can be changed via set_mean_values function!
 }
 
@@ -27,6 +26,7 @@ packet	Stage::getPacket(void)
 {
 	packet	p = _queue.front();
 
+	p.n_cust = _queue.size();
 	_queue.pop();
 	//if (p.id < 10)
 	//	std::cout << "\033[31mS{" << _id << "} --> \033[32mP{" << p.id << "}\033[0m" << std::endl;

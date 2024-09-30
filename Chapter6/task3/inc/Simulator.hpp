@@ -8,7 +8,7 @@ enum e_event_type { none, arrival, departure };
 class Simulator
 {
 private:
-
+	std::size_t	_capacity;
 private:
 	DataCollector	_dc;
 	int				_packet_id;
@@ -26,8 +26,9 @@ private:
 	void	display(void);
 public:
 	Simulator(void);
-	DataCollector	run(void);
-	void	setMeanValues(double time, StageMeanValues &m1, StageMeanValues &m2)
+	void			changeCapacity(std::size_t capacity) { _capacity = capacity; }
+	DataCollector	run(int cap);
+	void			setMeanValues(double time, StageMeanValues &m1, StageMeanValues &m2)
 	{
 		_mean_arr_time = time;
 		_stages[0].set_mean_values(m1.dep, m1.brk, m1.opr);

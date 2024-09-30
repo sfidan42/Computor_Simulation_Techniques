@@ -43,8 +43,10 @@ std::size_t	DataCollector::size(void) const
 	return (_data.size());
 }
 
-void	DataCollector::display(void)
+void	DataCollector::display(int cap)
 {
+	std::cout << "_________capacity_________" << std::endl;
+	std::cout << cap << std::endl;
 	std::cout << "____________data____________" << std::endl;
 	int	max = 20;
 	for (packet p : _data)
@@ -56,12 +58,12 @@ void	DataCollector::display(void)
 		}
 		std::cout << p.t_dep - p.t_arr << " ";
 	}
-	std::cout << std::endl;
 	std::cout << "_________total data_________" << std::endl;
 	std::cout << this->size() << std::endl;
 	std::cout << "______final statistics______" << std::endl;
 	this->_mean();
 	this->_stdDev();
+	std::cout << std::endl << std::endl;
 }
 
 void	DataCollector::_mean(void)
@@ -81,16 +83,18 @@ void	DataCollector::_stdDev(void)
 	for (packet p : _data)
 		variance += std::pow((p.t_dep - p.t_arr) - _m, 2);
 	_sd = std::sqrt(variance / this->size());
-	std::cout << "Standard deviation: " << _sd << std::endl;
+	std::cout << "StdDev: " << _sd << std::endl;
 }
 
-void	DataCollector::save(const char *filename) const
+void	DataCollector::save(const char *filename, int cap) const
 {
 	std::ofstream	file(filename);
 
 	if (!file.is_open())
 		throw std::runtime_error("DataCollector::save: could not open file!");
+	file << cap << std::endl;
+	file << _m << std::endl;
 	for (packet p : _data)
-		file << p.t_dep - p.t_arr << std::endl;
+		file << p.t_dep - p.t_arr << ", " << p.n_cust << std::endl;
 	file.close();
 }

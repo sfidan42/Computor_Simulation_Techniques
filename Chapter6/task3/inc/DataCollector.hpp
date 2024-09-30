@@ -10,6 +10,7 @@ typedef struct s_packet
 	int		id;
 	double	t_arr;
 	double	t_dep;
+	int		n_cust;
 }			packet;
 
 class DataCollector
@@ -30,6 +31,6 @@ public:
 	bool				check(void);
 	void				clear(int first, std::size_t exception_size);
 	std::size_t			size(void) const;
-	void				display(void);
-	void				save(const char *filename) const;
+	void				display(int cap);
+	void				save(const char *filename, int cap) const;
 };
