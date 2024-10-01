@@ -54,7 +54,7 @@ void	DataCollector::display(void)
 	{
 		std::cout << "________Machine " << i << "__________" << std::endl;
 		for (data d : _data[i])
-			std::cout << d.t_repair << " ";
+			std::cout << d.t_brk << " ";
 		std::cout << std::endl;
 	}
 	std::cout << "_________total data_________" << std::endl;
@@ -69,7 +69,7 @@ void	DataCollector::_mean(void)
 	_m = 0;
 	for (int i = 0; i < _nMachines; i++)
 		for (data d : _data[i])
-			_m += d.t_repair;
+			_m += d.t_brk;
 	_m /= this->size();
 	std::cout << "Mean: " << _m << std::endl;
 }
@@ -81,7 +81,7 @@ void	DataCollector::_stdDev(void)
 	variance = 0;
 	for (int i = 0; i < _nMachines; i++)
 		for (data d : _data[i])
-			variance += std::pow(d.t_repair - _m, 2);
+			variance += std::pow(d.t_brk - _m, 2);
 	_sd = std::sqrt(variance / this->size());
 	std::cout << "StdDev: " << _sd << std::endl;
 }
@@ -94,6 +94,6 @@ void	DataCollector::save(const char *filename) const
 		throw std::runtime_error("DataCollector::save: could not open file!");
 	for (int i = 0; i < _nMachines; i++)
 		for (data d : _data[i])
-			file << d.t_repair << std::endl;
+			file << d.t_brk << std::endl;
 	file.close();
 }

@@ -1,8 +1,11 @@
 #include <Simulator.hpp>
 
 Simulator::Simulator(int nMachines, int nRepairmen)
-:	_nMachines(nMachines), _nRepairmen(nRepairmen),
-	_mc(0), _rng(42)
+:	 _dc(nMachines),
+	_nMachines(nMachines),
+	_nRepairmen(nRepairmen),
+	_mc(0),
+	_rng(42)
 {
 	if (nMachines > 20 || nRepairmen > 10)
 		throw std::invalid_argument("nMachines > 20 or nRepairmen > 10");
@@ -59,8 +62,8 @@ int Simulator::schedule_event(void)
 
 DataCollector	Simulator::run(void)
 {
-	DataCollector	dc(_nMachines);
-	std::size_t		c1 = 0, c2 = 0;
+	std::size_t	c1;
+	std::size_t	c2;
 
 	//std::cout << "MC\t";
 	//for (std::size_t i = 0, n = _nMachines; i < n; i++)
@@ -69,12 +72,17 @@ DataCollector	Simulator::run(void)
 	//	std::cout << "BRK" << i << "\t" << "N" << i << "\t" << "Stat" << i << "\t";
 	//std::cout << std::endl;
 	//_display();
+	c1 = 0;
+	c2 = 0;
 	while (schedule_event())
 	{
 		if (_eventId < _nMachines)
 		{
-			data d = { .t_repair = _events[_eventId].clk };
-			dc[_eventId].push_back(d); c1++;
+			// --------start collecting brk data--------
+			data d = { .t_brk = _events[_eventId].clk };
+			_dc[_eventId].push_back(d);
+			c1++;			
+			// -----------------------------------------
 			_events[_eventId].clk = -1;
 			_repairmen.addQueue({_eventId, _mc + _rng.generateOne(5)});
 		}
@@ -82,18 +90,21 @@ DataCollector	Simulator::run(void)
 		{
 			int machineId = _repairmen[_eventId - _nMachines].front().id;
 			_repairmen[_eventId - _nMachines].pop();
-			dc[machineId].back().t_repair = _mc - dc[machineId].back().t_repair; c2++;
+			// ---------------finish collecting brk data--------------------
+			_dc[machineId].back().t_brk = _mc - _dc[machineId].back().t_brk;
+			c2++;
+			// -------------------------------------------------------------
 			_events[machineId] = {machineId, _mc + _rng.generateOne(10)};
 		}
 		//_display();
-		if (dc.size() >= 1050 && c1 == c2)
+		if (_dc.size() >= 1050 && c1 == c2)
 			break ;
 	}
 	int i = 0;
-	while (dc.size() > 1000)
+	while (_dc.size() > 1000)
 	{
-		dc[i].erase(dc[i].begin());
+		_dc[i].erase(_dc[i].begin());
 		i = (i + 1) % _nMachines;
 	}
-	return (dc);
+	return (_dc);
 }

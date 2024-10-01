@@ -10,6 +10,8 @@
 class Simulator
 {
 private:
+	DataCollector		_dc;
+private:
 	const int			_nMachines;
 	const int			_nRepairmen;
 	std::vector<Event>	_events;

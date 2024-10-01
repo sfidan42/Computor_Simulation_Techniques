@@ -7,7 +7,8 @@
 
 typedef struct s_data
 {
-	double	t_repair;
+	double	t_brk;
+
 }				data;
 
 class DataCollector
