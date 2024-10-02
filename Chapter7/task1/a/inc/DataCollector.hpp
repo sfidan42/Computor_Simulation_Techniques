@@ -2,33 +2,22 @@
 # include <vector>
 # include <stdexcept>
 # include <iostream>
-# include <cmath>
-# include <fstream>
 
 typedef struct s_data
 {
-	double	t_brk;
-
-}				data;
+	double	t_arr;
+	double	t_dep;
+}			data;
 
 class DataCollector
 {
 private:
-	double				_m;
-	double				_sd;
-private:
-	std::vector<data>	*_data;
-	int					_nMachines;
-	DataCollector(void);
-	void				_mean(void);
-	void				_stdDev(void);
+	std::vector<data>	_data[3];
 public:
-	DataCollector(int nMachines);
-	DataCollector(const DataCollector &dc);
-	DataCollector		&operator=(const DataCollector &dc);
-	~DataCollector(void);
-	std::vector<data>	&operator[](int i);
-	std::size_t			size(void) const;
-	void				display(void);
-	void				save(const char *filename) const;
+	void		setArr(int i, double clk);
+	void		setDep(int i, double clk);
+	void		display(void);
+	std::size_t	size(void);
+	bool		check(void);
+	void		clear(std::size_t start, std::size_t end);
 };

@@ -1,29 +1,22 @@
 #pragma once
 # include <iostream>
+# include <queue>
 # include <cfloat>
-# include <vector>
-# include <iomanip>
-# include "RNG.hpp"
-# include "Repairmen.hpp"
 # include "DataCollector.hpp"
+# include <iomanip>
 
 class Simulator
 {
-private:
+public:
 	DataCollector		_dc;
 private:
-	const int			_nMachines;
-	const int			_nRepairmen;
-	std::vector<Event>	_events;
-	int					_eventId;
-private:
 	double				_mc;
-	RNG					_rng;
-	Repairmen			_repairmen;
-	Simulator(void);
-	void	_display(void);
+	double				_clk[4];
+	std::queue<int>  	_broken_machines;
+	double				_generateOne(std::size_t max) { return ((double)rand() / RAND_MAX * max);}
 public:
-	Simulator(int nMachines, int nRepairmen);
-	int				schedule_event(void);
-	DataCollector	run(void);
+	Simulator(void);
+	int		schedule_event(void);
+	void	display(void);
+	bool	check(std::size_t start, std::size_t end);
 };

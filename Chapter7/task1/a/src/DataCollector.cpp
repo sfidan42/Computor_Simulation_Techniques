@@ -1,99 +1,54 @@
 #include <DataCollector.hpp>
 
-DataCollector::DataCollector(int nMachines) : _nMachines(nMachines)
+void	DataCollector::setArr(int i, double clk)
 {
-	_data = new std::vector<data>[nMachines];
+	if (i < 0 || i > 2)
+		throw (std::out_of_range("index out of range!"));
+	_data[i].push_back({clk, -1});
 }
 
-DataCollector::DataCollector(const DataCollector &dc)
+void	DataCollector::setDep(int i, double clk)
 {
-	_nMachines = dc._nMachines;
-	_data = new std::vector<data>[_nMachines];
-	for (int i = 0; i < _nMachines; i++)
-		_data[i] = dc._data[i];
-}
-
-DataCollector	&DataCollector::operator=(const DataCollector &dc)
-{
-	if (this != &dc)
-	{
-		_nMachines = dc._nMachines;
-		delete[] _data;
-		_data = new std::vector<data>[_nMachines];
-		for (int i = 0; i < _nMachines; i++)
-			_data[i] = dc._data[i];
-	}
-	return (*this);
-}
-
-DataCollector::~DataCollector(void)
-{
-	delete[] _data;
-}
-
-std::vector<data>	&DataCollector::operator[](int i)
-{
-	if (i >= _nMachines)
-		throw std::out_of_range("DataCollector::operator[]: index out of range!");
-	return (_data[i]);
-}
-
-std::size_t	DataCollector::size(void) const
-{
-	std::size_t	sum;
-
-	sum = 0;
-	for (int i = 0; i < _nMachines; i++)
-		sum += _data[i].size();
-	return (sum);
+	static int	last[3] = {0, 0, 0};
+	if (i < 0 || i > 2)
+		throw (std::out_of_range("index out of range!"));
+	_data[i][last[i]++].t_dep = clk;
 }
 
 void	DataCollector::display(void)
 {
-	for (int i = 0; i < _nMachines; i++)
+	for (int i = 0; i < 3; i++)
 	{
-		std::cout << "________Machine " << i << "__________" << std::endl;
-		for (data d : _data[i])
-			std::cout << d.t_brk << " ";
+		std::cout << "__________machine " << i << " arrivals________" << std::endl;
+		for (data &d : _data[i])
+			std::cout << d.t_arr << " ";
 		std::cout << std::endl;
+		std::cout << "_________machine " << i << " departures_______" << std::endl;
+		for (data &d : _data[i])
+			std::cout << d.t_dep << " ";
+		std::cout << std::endl;
+		std::cout << "____________size_____________" << std::endl;
+		std::cout << this->size() << std::endl;
 	}
-	std::cout << "_________total data_________" << std::endl;
-	std::cout << this->size() << std::endl;
-	std::cout << "______final statistics______" << std::endl;
-	this->_mean();
-	this->_stdDev();
 }
 
-void	DataCollector::_mean(void)
+std::size_t	DataCollector::size(void)
 {
-	_m = 0;
-	for (int i = 0; i < _nMachines; i++)
-		for (data d : _data[i])
-			_m += d.t_brk;
-	_m /= this->size();
-	std::cout << "Mean: " << _m << std::endl;
+	std::size_t	size = _data[0].size() + _data[1].size() + _data[2].size();
+
+	for (int i = 0; i < 3; i++)
+		for (auto rit = _data[i].rbegin(); rit != _data[i].rend() && rit->t_dep == -1; rit++)
+			size--;
+	return (size);
 }
 
-void	DataCollector::_stdDev(void)
+void	DataCollector::clear(std::size_t start, std::size_t end)
 {
-	double	variance;
-
-	variance = 0;
-	for (int i = 0; i < _nMachines; i++)
-		for (data d : _data[i])
-			variance += std::pow(d.t_brk - _m, 2);
-	_sd = std::sqrt(variance / this->size());
-	std::cout << "StdDev: " << _sd << std::endl;
-}
-
-void	DataCollector::save(const char *filename) const
-{
-	std::ofstream	file(filename);
-
-	if (!file.is_open())
-		throw std::runtime_error("DataCollector::save: could not open file!");
-	for (int i = 0; i < _nMachines; i++)
-		for (data d : _data[i])
-			file << d.t_brk << std::endl;
-	file.close();
+	for (std::size_t i = 0; i < start; i++)
+		_data[i % 3].erase(_data[i % 3].begin());
+	for (int i = 0; i < 3; i++)
+		for (auto rit = _data[i].rbegin(), rite = _data[i].rend(); rit != rite && rit->t_dep == -1; rit++)
+			_data[i].pop_back();
+	for (std::size_t i = 0; this->size() > end; i++)
+		_data[i++ % 3].pop_back();
 }

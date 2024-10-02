@@ -1,4 +1,4 @@
-S		=	RNG.cpp Simulator.cpp Repairmen.cpp DataCollector.cpp
+S		=	Simulator.cpp DataCollector.cpp
 O		=	$(S:.cpp=.o)
 SRC		=	$(addprefix src/, $(S))
 OBJ		=	$(addprefix int/, $(O))
@@ -15,24 +15,17 @@ CYAN	=	\033[0;36m
 WHITE	=	\033[0;37m
 END		=	\033[0m
 
-all: out $(EXE)
-	@echo "$(GREEN)MK > Running $(YELLOW)$(EXE)$(END)"
-	@./$(EXE) > out/simulation.txt
-	@echo "$(GREEN)MK > Running $(YELLOW)correlogram.py$(END)"
-	@python3 correlogram.py > out/results.txt 2> /dev/null
-	@echo "$(GREEN)MK > Results saved in $(YELLOW)out/*$(END)"
-
-out:
-	@mkdir -p out
+all: out/ $(EXE)
+	@./$(EXE) > out/output.txt
 
 int/%.o: src/%.cpp inc/%.hpp
 	@echo "$(GREEN)MK > Compiling $(BLUE)$<$(END) -> $(YELLOW)$@$(END)"
 	@$(CPP) -c $< -o $@
 
-int:
-	@mkdir -p int
+%/:
+	@mkdir -p $@
 
-$(NAME): int $(OBJ)
+$(NAME): int/ $(OBJ)
 	@ar rcs $(NAME) $(OBJ)
 	@echo "$(GREEN)MK > Library created: $(YELLOW)$(NAME)$(END)"
 
@@ -43,13 +36,12 @@ $(EXE): main.cpp $(NAME)
 clean:
 	@echo "$(RED)MK > Removing object files$(END)"
 	@echo "$(RED)MK > Removing output files$(END)"
-	@rm -rf int
+	@rm -rf int out
 
 fclean: clean
 	@echo "$(RED)MK > Removing the executable$(END)"
 	@echo "$(RED)MK > Removing the archive file$(END)"
-	@echo "$(RED)MK > Removing the outputs$(END)"
-	@rm -rf $(EXE) $(NAME) out
+	@rm -f $(EXE) $(NAME)
 
 re: fclean all
 
