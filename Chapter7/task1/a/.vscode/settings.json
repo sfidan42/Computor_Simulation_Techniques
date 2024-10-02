@@ -50,6 +50,7 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "climits": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "fstream": "cpp"
     }
 }

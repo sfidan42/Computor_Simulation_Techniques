@@ -2,6 +2,7 @@
 # include <vector>
 # include <stdexcept>
 # include <iostream>
+# include <fstream>
 
 typedef struct s_data
 {
@@ -20,4 +21,5 @@ public:
 	std::size_t	size(void);
 	bool		check(void);
 	void		clear(std::size_t start, std::size_t end);
+	void		save(void);
 };

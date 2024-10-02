@@ -16,7 +16,10 @@ WHITE	=	\033[0;37m
 END		=	\033[0m
 
 all: out/ $(EXE)
+	@echo "$(GREEN)MK > Running $(YELLOW)$(EXE)$(END)"
 	@./$(EXE) > out/output.txt
+	@echo "$(GREEN)MK > Running $(YELLOW)correlogram.py$(END)"
+	@python3 correlogram.py > out/correlogram.txt
 
 int/%.o: src/%.cpp inc/%.hpp
 	@echo "$(GREEN)MK > Compiling $(BLUE)$<$(END) -> $(YELLOW)$@$(END)"

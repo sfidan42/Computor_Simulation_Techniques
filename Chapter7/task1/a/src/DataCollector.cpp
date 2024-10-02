@@ -52,3 +52,25 @@ void	DataCollector::clear(std::size_t start, std::size_t end)
 	for (std::size_t i = 0; this->size() > end; i++)
 		_data[i++ % 3].pop_back();
 }
+
+void	DataCollector::save(void)
+{
+	std::ofstream	file_arr("out/arrivals.txt");
+	std::ofstream	file_dep("out/departures.txt");
+	std::ofstream	file_wait("out/waitings.txt");
+
+	if (!file_arr.is_open() || !file_dep.is_open())
+		throw (std::runtime_error("file not open!"));
+	for (int i = 0; i < 3; i++)
+	{
+		for (data &d : _data[i])
+		{
+			file_arr << d.t_arr << std::endl;
+			file_dep << d.t_dep << std::endl;
+			file_wait << d.t_dep - d.t_arr << std::endl;
+		}
+	}
+	file_arr.close();
+	file_dep.close();
+	file_wait.close();
+}
